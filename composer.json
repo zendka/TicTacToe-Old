@@ -1,0 +1,7 @@
+{
+    "name": "florin-buga/tic-tac-toe",
+    "description": "Plays Tic Tac Toe without loosing",
+    "require-dev": {
+        "phpunit/phpunit": "5.1.*"
+    },
+}
