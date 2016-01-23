@@ -15,15 +15,28 @@ class GameTest extends \PHPUnit_Framework_TestCase
      * @covers \Florin\TicTacToe\Game::__construct
      * @covers \Florin\TicTacToe\Game::getGrid
      */
-    public function testGameStartsWithEmptyGrid()
+    public function testGameStartsWithEmptyGridByDefault()
     {
         $game = new Game();
+
         $emptyGrid = [
             [null, null, null],
             [null, null, null],
             [null, null, null]
         ];
         $this->assertEquals($emptyGrid, $game->getGrid());
+    }
+
+    public function testGameStartsWithGivenGrid()
+    {
+        $grid = [
+            ['0', null, '0'],
+            [null, 'X', 'X'],
+            [null, null, null]
+        ];
+        $game = new Game($grid);
+
+        $this->assertEquals($grid, $game->getGrid());
     }
 
     public function testPlayersMarkIsRegisteredCorrectly()
