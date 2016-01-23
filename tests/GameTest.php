@@ -13,7 +13,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers \Florin\TicTacToe\Game::__construct
-     * @covers \Florin\TicTacToe\Game::showGrid
+     * @covers \Florin\TicTacToe\Game::getGrid
      */
     public function testGameStartsWithEmptyGrid()
     {
@@ -23,7 +23,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
             [null, null, null],
             [null, null, null]
         ];
-        $this->assertEquals($emptyGrid, $game->showGrid());
+        $this->assertEquals($emptyGrid, $game->getGrid());
     }
 
     public function testPlayersMarkIsRegisteredCorrectly()
@@ -38,6 +38,6 @@ class GameTest extends \PHPUnit_Framework_TestCase
             [null, null, null],
             [null, null, null]
         ];
-        $this->assertEquals($expectedGrid, $game->showGrid());
+        $this->assertEquals($expectedGrid, $game->getGrid());
     }
 }

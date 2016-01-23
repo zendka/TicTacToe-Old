@@ -28,7 +28,7 @@ class Game
      *
      * @return [string] the grid
      */
-    public function showGrid()
+    public function getGrid()
     {
         return $this->grid;
     }
