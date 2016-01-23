@@ -43,8 +43,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         $game = new Game();
 
-        $position = ['row' => 0, 'col' => 0];
-        $game->playerMarks($position);
+        $game->playerMarks(0, 0);
 
         $expectedGrid = [
             ['X', null, null],
@@ -63,8 +62,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         ];
         $game = new Game($grid);
 
-        $position = ['row' => 2, 'col' => 0];
-        $game->playerMarks($position);
+        $game->playerMarks(2, 0);
 
         $expectedGrid = [
             ['X', '0', null],
@@ -83,17 +81,13 @@ class GameTest extends \PHPUnit_Framework_TestCase
         ];
         $game = new Game($grid);
 
-        $position = ['row' => 0, 'col' => 0];
-
-        $this->assertFalse($game->playerMarks($position));
+        $this->assertFalse($game->playerMarks(1, 0));
     }
 
     public function testPlayerCantMarkOutsideThe3x3Grid()
     {
         $game = new Game();
 
-        $position = ['row' => 3, 'col' => 0];
-
-        $this->assertFalse($game->playerMarks($position));
+        $this->assertFalse($game->playerMarks(3, 0));
     }
 }

@@ -48,22 +48,23 @@ class Game
     /**
      * Registers the player's mark
      *
-     * @param  array the position to mark
-     * @return bool the validity of the mark
+     * @param  row the row of the marked space
+     * @param  col the column of the market space
+     * @return bool true if the mark is valid, false otherwise
      */
-    public function playerMarks($position)
+    public function playerMarks($row, $col)
     {
         // Check if the mark is inside the grid
-        if (!($position['row'] >= 0 && $position['row'] <= 2 && $position['col'] >=0 && $position['row'] <=2)) {
+        if (!($row >= 0 && $row <= 2 && $col >=0 && $row <=2)) {
             return false;
         }
 
         // Check the mark is in an empty space
-        if (!empty($this->grid[$position['row']][$position['col']])) {
+        if (!is_null($this->grid[$row][$col])) {
             return false;
         }
 
-        $this->grid[$position['row']][$position['col']] = 'X';
+        $this->grid[$row][$col] = 'X';
 
         return true;
     }
