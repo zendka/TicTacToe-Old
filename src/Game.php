@@ -24,6 +24,18 @@ class Game
     ];
 
     /**
+     * Constructor
+     *
+     * @param [string] the 3x3 starging grid containing 'X', '0' and null
+     */
+    public function __construct($grid = null)
+    {
+        if ($grid) {
+            $this->grid = $grid;
+        }
+    }
+
+    /**
      * Shows the current state of the grid
      *
      * @return [string] the grid
