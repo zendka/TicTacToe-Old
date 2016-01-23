@@ -48,10 +48,14 @@ class Game
     /**
      * Registers the player's mark
      *
+     * @param  array the position to mark
      * @return bool the validity of the mark
      */
     public function playerMarks($position)
     {
+        if (!($position['row'] >= 0 && $position['row'] <= 2 && $position['col'] >=0 && $position['row'] <=2)) {
+            return false;
+        }
         if (empty($this->grid[$position['row']][$position['col']])) {
             $this->grid[$position['row']][$position['col']] = 'X';
             return true;
