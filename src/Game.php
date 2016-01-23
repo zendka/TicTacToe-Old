@@ -53,14 +53,18 @@ class Game
      */
     public function playerMarks($position)
     {
+        // Check if the mark is inside the grid
         if (!($position['row'] >= 0 && $position['row'] <= 2 && $position['col'] >=0 && $position['row'] <=2)) {
             return false;
         }
-        if (empty($this->grid[$position['row']][$position['col']])) {
-            $this->grid[$position['row']][$position['col']] = 'X';
-            return true;
-        } else {
+
+        // Check the mark is in an empty space
+        if (!empty($this->grid[$position['row']][$position['col']])) {
             return false;
         }
+
+        $this->grid[$position['row']][$position['col']] = 'X';
+
+        return true;
     }
 }
