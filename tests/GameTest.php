@@ -39,7 +39,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($grid, $game->getGrid());
     }
 
-    public function testPlayersMarkIsRegisteredCorrectly()
+    public function testPlayersMarkIsRegisteredCorrectlyInEmptyGrid()
     {
         $game = new Game();
 
@@ -50,6 +50,26 @@ class GameTest extends \PHPUnit_Framework_TestCase
             ['X', null, null],
             [null, null, null],
             [null, null, null]
+        ];
+        $this->assertEquals($expectedGrid, $game->getGrid());
+    }
+
+    public function testPlayersMarkIsRegisteredCorrectlyInRandomGrid()
+    {
+        $grid = [
+            ['X', '0', null],
+            ['0', 'X', 'X'],
+            [null, '0', null]
+        ];
+        $game = new Game($grid);
+
+        $position = ['row' => 2, 'col' => 0];
+        $game->playerMarks($position);
+
+        $expectedGrid = [
+            ['X', '0', null],
+            ['0', 'X', 'X'],
+            ['X', '0', null]
         ];
         $this->assertEquals($expectedGrid, $game->getGrid());
     }
