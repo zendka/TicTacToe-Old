@@ -3,5 +3,8 @@
 // Autoload Classes
 spl_autoload_register(function ($class) {
     $parts = explode('\\', $class);
-    require end($parts) . '.php';
+    $filename = __DIR__ . '/' . end($parts) . '.php';
+    if (file_exists($filename)) {
+        require $filename;
+    }
 });
