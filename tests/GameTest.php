@@ -87,4 +87,13 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($game->playerMarks($position));
     }
+
+    public function testPlayerCantMarkOutsideThe3x3Grid()
+    {
+        $game = new Game();
+
+        $position = ['row' => 3, 'col' => 0];
+
+        $this->assertFalse($game->playerMarks($position));
+    }
 }
