@@ -73,4 +73,18 @@ class GameTest extends \PHPUnit_Framework_TestCase
         ];
         $this->assertEquals($expectedGrid, $game->getGrid());
     }
+
+    public function testPlayerCantMarkAnAlreadyMarkedSpace()
+    {
+        $grid = [
+            ['X', '0', null],
+            ['0', 'X', 'X'],
+            [null, '0', null]
+        ];
+        $game = new Game($grid);
+
+        $position = ['row' => 0, 'col' => 0];
+
+        $this->assertFalse($game->playerMarks($position));
+    }
 }
