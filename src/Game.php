@@ -102,8 +102,8 @@ class Game
      */
     private function block()
     {
-        if ($computerWinningPositions = $this->getWinningPositions('X')) {
-            $this->grid[$computerWinningPositions[0]['row']][$computerWinningPositions[0]['col']] = 'O';
+        if ($humanWinningPositions = $this->getWinningPositions('X')) {
+            $this->grid[$humanWinningPositions[0]['row']][$humanWinningPositions[0]['col']] = 'O';
             return true;
         }
 
