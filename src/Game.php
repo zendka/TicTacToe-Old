@@ -145,6 +145,24 @@ class Game
             return true;
         }
 
+        // Check second diagonal
+        $numberOf0s = 0;
+        $numberOfEmptySpaces = 0;
+        for ($i=0; $i<3; $i++) {
+            if ($this->grid[$i][2-$i] == 'O') {
+                $numberOf0s++;
+            } elseif (empty($this->grid[$i][2-$i])) {
+                $numberOfEmptySpaces++;
+                $emptySpaceRow = $i;
+                $emptySpaceCol = 2-$i;
+            }
+        }
+        if ($numberOf0s == 2 && $numberOfEmptySpaces == 1) {
+            // That's a win
+            $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
+            return true;
+        }
+
         return false;
     }
 }
