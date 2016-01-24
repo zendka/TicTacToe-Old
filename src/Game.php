@@ -25,7 +25,7 @@ class Game
     /**
      * Constructor
      *
-     * @param array $grid The 3x3 starting grid containing 'X', '0' and null
+     * @param array $grid The 3x3 starting grid containing 'X', 'O' and null
      */
     public function __construct($grid = null)
     {

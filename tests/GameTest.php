@@ -32,7 +32,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testGameStartsWithGivenGrid()
     {
         $grid = [
-            ['0', null, '0'],
+            ['O', null, 'O'],
             [null, 'X', 'X'],
             [null, null, null]
         ];
@@ -64,18 +64,18 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testPlayersMarkIsRegisteredCorrectlyInRandomGrid()
     {
         $grid = [
-            ['X', '0', null],
-            ['0', 'X', 'X'],
-            [null, '0', null]
+            ['X', 'O', null],
+            ['O', 'X', 'X'],
+            [null, 'O', null]
         ];
         $game = new Game($grid);
 
         $game->playerMarks(2, 0);
 
         $expectedGrid = [
-            ['X', '0', null],
-            ['0', 'X', 'X'],
-            ['X', '0', null]
+            ['X', 'O', null],
+            ['O', 'X', 'X'],
+            ['X', 'O', null]
         ];
         $this->assertEquals($expectedGrid, $game->getGrid());
     }
@@ -86,9 +86,9 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testPlayersMarkIsNotValidIfInAnAlreadyMarkedSpace()
     {
         $grid = [
-            ['X', '0', null],
-            ['0', 'X', 'X'],
-            [null, '0', null]
+            ['X', 'O', null],
+            ['O', 'X', 'X'],
+            [null, 'O', null]
         ];
         $game = new Game($grid);
 
