@@ -220,5 +220,23 @@ class Game
                 return true;
             }
         }
+
+        // Check first diagonal
+        $numberOfXs = 0;
+        $numberOfEmptySpaces = 0;
+        for ($i=0; $i<3; $i++) {
+            if ($this->grid[$i][$i] == 'X') {
+                $numberOfXs++;
+            } elseif (empty($this->grid[$i][$i])) {
+                $numberOfEmptySpaces++;
+                $emptySpaceRow = $i;
+                $emptySpaceCol = $i;
+            }
+        }
+        if ($numberOfXs == 2 && $numberOfEmptySpaces == 1) {
+            // That needs to be blocked
+            $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
+            return true;
+        }
     }
 }

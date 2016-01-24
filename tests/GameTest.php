@@ -242,4 +242,27 @@ class GameTest extends \PHPUnit_Framework_TestCase
         ];
         $this->assertEquals($expectedGrid, $game->getGrid());
     }
+
+    /**
+     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::block
+     */
+    public function testComputerBlocksFirstDiagonal()
+    {
+        $blockingGrid = [
+            ['X', null, null],
+            ['X', null, 'O'],
+            ['O', null, 'X']
+        ];
+        $game = new Game($blockingGrid);
+
+        $game->computerMarks();
+
+        $expectedGrid = [
+            ['X', null, null],
+            ['X', 'O', 'O'],
+            ['O', null, 'X']
+        ];
+        $this->assertEquals($expectedGrid, $game->getGrid());
+    }
 }
