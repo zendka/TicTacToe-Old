@@ -73,188 +73,53 @@ class Game
      */
     public function computerMarks()
     {
-        if ($this->win()) {
+        if ($this->win('O')) {
             return;
-        } elseif ($this->block()) {
+        } elseif ($this->win('X')) {
             return;
         }
     }
 
     /**
-     * Checks if there's a winning position and marks it
+     * Checks if there's a winning position for a given player
      *
-     * That is: check if there is a row with two Os and an empty space
+     * That is: check if there is a line with with an empty space and two marks of that player
      *
-     * @todo Build a Grid class that implements getPositionsContaining($value, $context = 'row', $no = 0)
-     *
-     * @return bool True if a winning position was found and marked, false otherwise
+     * @param  str  $player Which player to check: 'X' or 'O'
+     * @return bool         True if a winning position was found and marked, false otherwise
      */
-    private function win()
+    private function win($player = 'O')
     {
-        // Check rows
         for ($i=0; $i<3; $i++) {
-            $numberOf0s = 0;
-            $numberOfEmptySpaces = 0;
             for ($j=0; $j<3; $j++) {
-                if ($this->grid[$i][$j] == 'O') {
-                    $numberOf0s++;
-                } elseif (empty($this->grid[$i][$j])) {
-                    $numberOfEmptySpaces++;
-                    $emptySpaceRow = $i;
-                    $emptySpaceCol = $j;
+                if (empty($this->grid[$i][$j])) {
+                    // Check row
+                    if ($this->grid[$i][($j+1)%3] == $player && $this->grid[$i][($j+2)%3] == $player) {
+                        $this->grid[$i][$j] = 'O';
+                        return true;
+                    }
+
+                    // Check column
+                    if ($this->grid[($i+1)%3][$j] == $player && $this->grid[($i+2)%3][$j] == $player) {
+                        $this->grid[$i][$j] = 'O';
+                        return true;
+                    }
+
+                    // Check first diagonal
+                    if ($i == $j && $this->grid[($i+1)%3][($j+1)%3] == $player && $this->grid[($i+2)%3][($j+2)%3] == $player) {
+                        $this->grid[$i][$j] = 'O';
+                        return true;
+                    }
+
+                    // Check second diagonal
+                    if ($i == 2-$j && $this->grid[($i+1)%3][2-($j+1)%3] == $player && $this->grid[($i+2)%3][2-($j+2)%3] == $player) {
+                        $this->grid[$i][$j] = 'O';
+                        return true;
+                    }
                 }
             }
-            if ($numberOf0s == 2 && $numberOfEmptySpaces == 1) {
-                // That's a win
-                $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
-                return true;
-            }
-        }
-
-        // Check columns
-        for ($j=0; $j<3; $j++) {
-            $numberOf0s = 0;
-            $numberOfEmptySpaces = 0;
-            for ($i=0; $i<3; $i++) {
-                if ($this->grid[$i][$j] == 'O') {
-                    $numberOf0s++;
-                } elseif (empty($this->grid[$i][$j])) {
-                    $numberOfEmptySpaces++;
-                    $emptySpaceRow = $i;
-                    $emptySpaceCol = $j;
-                }
-            }
-            if ($numberOf0s == 2 && $numberOfEmptySpaces == 1) {
-                // That's a win
-                $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
-                return true;
-            }
-        }
-
-        // Check first diagonal
-        $numberOf0s = 0;
-        $numberOfEmptySpaces = 0;
-        for ($i=0; $i<3; $i++) {
-            if ($this->grid[$i][$i] == 'O') {
-                $numberOf0s++;
-            } elseif (empty($this->grid[$i][$i])) {
-                $numberOfEmptySpaces++;
-                $emptySpaceRow = $i;
-                $emptySpaceCol = $i;
-            }
-        }
-        if ($numberOf0s == 2 && $numberOfEmptySpaces == 1) {
-            // That's a win
-            $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
-            return true;
-        }
-
-        // Check second diagonal
-        $numberOf0s = 0;
-        $numberOfEmptySpaces = 0;
-        for ($i=0; $i<3; $i++) {
-            if ($this->grid[$i][2-$i] == 'O') {
-                $numberOf0s++;
-            } elseif (empty($this->grid[$i][2-$i])) {
-                $numberOfEmptySpaces++;
-                $emptySpaceRow = $i;
-                $emptySpaceCol = 2-$i;
-            }
-        }
-        if ($numberOf0s == 2 && $numberOfEmptySpaces == 1) {
-            // That's a win
-            $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
-            return true;
         }
 
         return false;
-    }
-
-    /**
-     * Checks if there's a winning position for the opponent and blocks it
-     *
-     * That is: check if there is a row with two Xs and an empty space
-     *
-     * @todo Build a Grid class that implements getPositionsContaining($value, $context = 'row', $no = 0)
-     *
-     * @return bool True if a winning position was found and blocked, false otherwise
-     */
-    private function block()
-    {
-        // Check rows
-        for ($i=0; $i<3; $i++) {
-            $numberOfXs = 0;
-            $numberOfEmptySpaces = 0;
-            for ($j=0; $j<3; $j++) {
-                if ($this->grid[$i][$j] == 'X') {
-                    $numberOfXs++;
-                } elseif (empty($this->grid[$i][$j])) {
-                    $numberOfEmptySpaces++;
-                    $emptySpaceRow = $i;
-                    $emptySpaceCol = $j;
-                }
-            }
-            if ($numberOfXs == 2 && $numberOfEmptySpaces == 1) {
-                // That needs to be blocked
-                $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
-                return true;
-            }
-        }
-
-        // Check columns
-        for ($j=0; $j<3; $j++) {
-            $numberOfXs = 0;
-            $numberOfEmptySpaces = 0;
-            for ($i=0; $i<3; $i++) {
-                if ($this->grid[$i][$j] == 'X') {
-                    $numberOfXs++;
-                } elseif (empty($this->grid[$i][$j])) {
-                    $numberOfEmptySpaces++;
-                    $emptySpaceRow = $i;
-                    $emptySpaceCol = $j;
-                }
-            }
-            if ($numberOfXs == 2 && $numberOfEmptySpaces == 1) {
-                // That needs to be blocked
-                $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
-                return true;
-            }
-        }
-
-        // Check first diagonal
-        $numberOfXs = 0;
-        $numberOfEmptySpaces = 0;
-        for ($i=0; $i<3; $i++) {
-            if ($this->grid[$i][$i] == 'X') {
-                $numberOfXs++;
-            } elseif (empty($this->grid[$i][$i])) {
-                $numberOfEmptySpaces++;
-                $emptySpaceRow = $i;
-                $emptySpaceCol = $i;
-            }
-        }
-        if ($numberOfXs == 2 && $numberOfEmptySpaces == 1) {
-            // That needs to be blocked
-            $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
-            return true;
-        }
-
-        // Check second diagonal
-        $numberOfXs = 0;
-        $numberOfEmptySpaces = 0;
-        for ($i=0; $i<3; $i++) {
-            if ($this->grid[$i][2-$i] == 'X') {
-                $numberOfXs++;
-            } elseif (empty($this->grid[$i][2-$i])) {
-                $numberOfEmptySpaces++;
-                $emptySpaceRow = $i;
-                $emptySpaceCol = 2-$i;
-            }
-        }
-        if ($numberOfXs == 2 && $numberOfEmptySpaces == 1) {
-            // That needs to be blocked
-            $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
-            return true;
-        }
     }
 }
