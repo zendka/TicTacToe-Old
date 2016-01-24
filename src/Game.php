@@ -83,6 +83,8 @@ class Game
             return;
         } elseif ($this->center()) {
             return;
+        } elseif ($this->corner()) {
+            return;
         }
     }
 
@@ -182,6 +184,30 @@ class Game
     {
         if (empty($this->grid[1][1])) {
             $this->grid[1][1] = 'O';
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Marks a corner if available
+     *
+     * @return bool Returns true if a corner has been marked, false otherwise
+     */
+    private function corner()
+    {
+        if (empty($this->grid[0][0])) {
+            $this->grid[0][0] = 'O';
+            return true;
+        } elseif (empty($this->grid[0][2])) {
+            $this->grid[0][2] = 'O';
+            return true;
+        } elseif (empty($this->grid[2][0])) {
+            $this->grid[2][0] = 'O';
+            return true;
+        } elseif (empty($this->grid[2][2])) {
+            $this->grid[2][2] = 'O';
             return true;
         }
 

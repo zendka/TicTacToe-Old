@@ -319,7 +319,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testComputerBlocksFork()
     {
         $grid = [
-            ['X', 'O' , 'X' ],
+            ['X' , 'O' , 'X' ],
             [null, null, null],
             [null, null, null]
         ];
@@ -352,9 +352,48 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
         $expectedGrid = [
             ['X' , null, null],
-            [null, 'O', null],
+            [null, 'O' , null],
             [null, null, null]
         ];
         $this->assertEquals($expectedGrid, $game->getGrid());
+    }
+
+    /**
+     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::corner
+     */
+    public function testComputerMarksCorner()
+    {
+        $grid = [
+            [null, null, null],
+            ['X' , 'O' , 'X' ],
+            [null, null, null]
+        ];
+        $game = new Game($grid);
+
+        $game->computerMarks();
+
+        $expectedGrids = [];
+        $expectedGrids[] = [
+            ['O' , null, null],
+            ['X' , 'O' , 'X' ],
+            [null, null, null]
+        ];
+        $expectedGrids[] = [
+            [null, null, 'O' ],
+            ['X' , 'O' , 'X' ],
+            [null, null, null]
+        ];
+        $expectedGrids[] = [
+            [null, null, null],
+            ['X' , 'O' , 'X' ],
+            [null, null, 'O' ]
+        ];
+        $expectedGrids[] = [
+            [null, null, null],
+            ['X' , 'O' , 'X' ],
+            ['O' , null, null]
+        ];
+        $this->assertTrue(in_array($game->getGrid(), $expectedGrids));
     }
 }
