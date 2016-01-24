@@ -81,6 +81,8 @@ class Game
             return;
         } elseif ($this->blockFork()) {
             return;
+        } elseif ($this->center()) {
+            return;
         }
     }
 
@@ -166,6 +168,21 @@ class Game
                     $this->grid[$i][$j] = null;
                 }
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * Marks the center if available
+     *
+     * @return bool Returns true if the center has been marked, false otherwise
+     */
+    private function center()
+    {
+        if (empty($this->grid[1][1])) {
+            $this->grid[1][1] = 'O';
+            return true;
         }
 
         return false;
