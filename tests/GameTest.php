@@ -72,7 +72,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedGrid, $game->getGrid());
     }
 
-    public function testPlayerCantMarkAnAlreadyMarkedSpace()
+    public function testPlayersMarkIsNotValidIfInAnAlreadyMarkedSpace()
     {
         $grid = [
             ['X', '0', null],
@@ -84,7 +84,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($game->playerMarks(1, 0));
     }
 
-    public function testPlayerCantMarkOutsideThe3x3Grid()
+    public function testPlayersMarkIsNotValidIfOutsideThe3x3Grid()
     {
         $game = new Game();
 
