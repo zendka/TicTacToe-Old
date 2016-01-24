@@ -85,6 +85,8 @@ class Game
             return;
         } elseif ($this->corner()) {
             return;
+        } elseif ($this->side()) {
+            return;
         }
     }
 
@@ -208,6 +210,30 @@ class Game
             return true;
         } elseif (empty($this->grid[2][2])) {
             $this->grid[2][2] = 'O';
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Marks a side if available
+     *
+     * @return bool Returns true if a side has been marked, false otherwise
+     */
+    private function side()
+    {
+        if (empty($this->grid[0][1])) {
+            $this->grid[0][1] = 'O';
+            return true;
+        } elseif (empty($this->grid[1][0])) {
+            $this->grid[1][0] = 'O';
+            return true;
+        } elseif (empty($this->grid[1][2])) {
+            $this->grid[1][2] = 'O';
+            return true;
+        } elseif (empty($this->grid[2][1])) {
+            $this->grid[2][1] = 'O';
             return true;
         }
 

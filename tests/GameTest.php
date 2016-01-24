@@ -396,4 +396,33 @@ class GameTest extends \PHPUnit_Framework_TestCase
         ];
         $this->assertTrue(in_array($game->getGrid(), $expectedGrids));
     }
+
+    /**
+     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::side
+     */
+    public function testComputerMarksSide()
+    {
+        $grid = [
+            ['X' , 'O' , 'X' ],
+            [null, 'X' , null],
+            ['O' , 'X' , 'O' ]
+        ];
+        $game = new Game($grid);
+
+        $game->computerMarks();
+
+        $expectedGrids = [];
+        $expectedGrids[] = [
+            ['X' , 'O' , 'X' ],
+            [null, 'X' , 'O' ],
+            ['O' , 'X' , 'O' ]
+        ];
+        $expectedGrids[] = [
+            ['X' , 'O' , 'X' ],
+            ['O' , 'X' , null],
+            ['O' , 'X' , 'O' ]
+        ];
+        $this->assertTrue(in_array($game->getGrid(), $expectedGrids));
+    }
 }
