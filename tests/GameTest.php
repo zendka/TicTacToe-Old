@@ -477,4 +477,19 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($game->isOver());
     }
+
+    /**
+     * @covers \Florin\TicTacToe\Game::isOver
+     */
+    public function testGameIsNotOver()
+    {
+        $grid = [
+            ['X' , 'O' , 'X' ],
+            [null, 'O' , null],
+            ['X' , null, null]
+        ];
+        $game = new Game($grid);
+
+        $this->assertFalse($game->isOver());
+    }
 }
