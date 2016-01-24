@@ -23,6 +23,11 @@ class Game
     ];
 
     /**
+     * @var bool $computerWon True if the computer won, false otherwise
+     */
+    private $computerWon = false;
+
+    /**
      * Constructor
      *
      * @param array $grid The 3x3 starting grid containing 'X', 'O' and null
@@ -42,6 +47,16 @@ class Game
     public function getGrid()
     {
         return $this->grid;
+    }
+
+    /**
+     * Checks if the computer won
+     *
+     * @return array
+     */
+    public function computerWon()
+    {
+        return $this->computerWon;
     }
 
     /**
@@ -99,6 +114,7 @@ class Game
     {
         if ($computerWinningPositions = $this->getWinningPositions('O')) {
             $this->grid[$computerWinningPositions[0]['row']][$computerWinningPositions[0]['col']] = 'O';
+            $this->computerWon = true;
             return true;
         }
 
