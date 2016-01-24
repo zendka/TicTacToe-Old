@@ -443,4 +443,20 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($game->computerWon());
     }
+
+    /**
+     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerWon
+     */
+    public function testComputerHasntWon()
+    {
+        $grid = [
+            ['X' , 'O' , 'X' ],
+            [null, 'O' , null],
+            ['X' , null, null]
+        ];
+        $game = new Game($grid);
+
+        $this->assertFalse($game->computerWon());
+    }
 }
