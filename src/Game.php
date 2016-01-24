@@ -129,7 +129,7 @@ class Game
                     $winningRow    = $this->grid[$i][($j+1)%3] == $player && $this->grid[$i][($j+2)%3] == $player;
                     $winningColumn = $this->grid[($i+1)%3][$j] == $player && $this->grid[($i+2)%3][$j] == $player;
                     $winningFirstDiagonal  = $i == $j   && $this->grid[($i+1)%3][($j+1)%3]   == $player && $this->grid[($i+2)%3][($j+2)%3]   == $player;
-                    $winningSecondDiagonal = $i == 2-$j && $this->grid[($i+1)%3][2-($j+1)%3] == $player && $this->grid[($i+2)%3][2-($j+2)%3] == $player;
+                    $winningSecondDiagonal = $i == 2-$j && $this->grid[($i+1)%3][2-($i+1)%3] == $player && $this->grid[($i+2)%3][2-($i+2)%3] == $player;
                     if ($winningRow || $winningColumn || $winningFirstDiagonal || $winningSecondDiagonal) {
                         $winningPositions[] = array('row' => $i, 'col' => $j);
                     }
