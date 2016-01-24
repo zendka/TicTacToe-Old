@@ -203,12 +203,12 @@ class GameTest extends \PHPUnit_Framework_TestCase
      */
     public function testComputerBlocksARow()
     {
-        $winningGrid = [
+        $blockingGrid = [
             ['X', null, 'X'],
             ['O', null, null],
             [null, 'X', 'O']
         ];
-        $game = new Game($winningGrid);
+        $game = new Game($blockingGrid);
 
         $game->computerMarks();
 
@@ -216,6 +216,29 @@ class GameTest extends \PHPUnit_Framework_TestCase
             ['X', 'O', 'X'],
             ['O', null, null],
             [null, 'X', 'O']
+        ];
+        $this->assertEquals($expectedGrid, $game->getGrid());
+    }
+
+    /**
+     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::block
+     */
+    public function testComputerBlocksAColumn()
+    {
+        $blockingGrid = [
+            ['X', null, null],
+            ['X', 'O', 'X'],
+            [null, null, 'O']
+        ];
+        $game = new Game($blockingGrid);
+
+        $game->computerMarks();
+
+        $expectedGrid = [
+            ['X', null, null],
+            ['X', 'O', 'X'],
+            ['O', null, 'O']
         ];
         $this->assertEquals($expectedGrid, $game->getGrid());
     }

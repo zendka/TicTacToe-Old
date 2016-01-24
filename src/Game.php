@@ -195,7 +195,27 @@ class Game
                 }
             }
             if ($numberOfXs == 2 && $numberOfEmptySpaces == 1) {
-                // That's a win
+                // That needs to be blocked
+                $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
+                return true;
+            }
+        }
+
+        // Check columns
+        for ($j=0; $j<3; $j++) {
+            $numberOfXs = 0;
+            $numberOfEmptySpaces = 0;
+            for ($i=0; $i<3; $i++) {
+                if ($this->grid[$i][$j] == 'X') {
+                    $numberOfXs++;
+                } elseif (empty($this->grid[$i][$j])) {
+                    $numberOfEmptySpaces++;
+                    $emptySpaceRow = $i;
+                    $emptySpaceCol = $j;
+                }
+            }
+            if ($numberOfXs == 2 && $numberOfEmptySpaces == 1) {
+                // That needs to be blocked
                 $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
                 return true;
             }
