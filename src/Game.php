@@ -106,6 +106,29 @@ class Game
     }
 
     /**
+     * Checks if the game is over
+     *
+     * @return bool
+     */
+    public function isOver()
+    {
+        if ($this->computerWon) {
+            return true;
+        }
+
+        // Check if there's any empty space left to play
+        for ($i=0; $i<3; $i++) {
+            for ($j=0; $j<3; $j++) {
+                if (empty($this->grid[$i][$j])) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Checks if there's a winning position and marks it
      *
      * @return bool Returns true if a position was found and marked
