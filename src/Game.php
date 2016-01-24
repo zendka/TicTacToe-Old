@@ -67,4 +67,46 @@ class Game
 
         return true;
     }
+
+    /**
+     * Calculates computer's best position and marks it on the grid
+     */
+    public function computerMarks()
+    {
+        if ($this->win()) {
+            return;
+        }
+    }
+
+    /**
+     * Checks if there's a winning position
+     *
+     * That is: check if there is a row with two Os and an empty space (to be marked)
+     *
+     * @return bool
+     */
+    private function win()
+    {
+        // Check rows
+        for ($i=0; $i<3; $i++) {
+            $numberOf0s = 0;
+            $numberOfEmptySpaces = 0;
+            for ($j=0; $j<3; $j++) {
+                if ($this->grid[$i][$j] == 'O') {
+                    $numberOf0s++;
+                } elseif (empty($this->grid[$i][$j])) {
+                    $numberOfEmptySpaces++;
+                    $emptySpaceRow = $i;
+                    $emptySpaceCol = $j;
+                }
+            }
+            if ($numberOf0s == 2 && $numberOfEmptySpaces == 1) {
+                // That's a win
+                $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
