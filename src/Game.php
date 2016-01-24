@@ -144,6 +144,8 @@ class Game
     /**
      * Checks if there's a fork opportunity for the opponent and blocks it
      *
+     * @todo Choose the best position if several available
+     *
      * @return bool Returns true if a position was found and blocked
      */
     private function blockFork()
