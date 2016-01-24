@@ -75,17 +75,19 @@ class Game
     {
         if ($this->win()) {
             return;
+        } elseif ($this->block()) {
+            return;
         }
     }
 
     /**
-     * Checks if there's a winning position
+     * Checks if there's a winning position and marks it
      *
-     * That is: check if there is a row with two Os and an empty space (to be marked)
+     * That is: check if there is a row with two Os and an empty space
      *
      * @todo Build a Grid class that implements getPositionsContaining($value, $context = 'row', $no = 0)
      *
-     * @return bool
+     * @return bool True if a winning position was found and marked, false otherwise
      */
     private function win()
     {
@@ -166,5 +168,37 @@ class Game
         }
 
         return false;
+    }
+
+    /**
+     * Checks if there's a winning position for the opponent and blocks it
+     *
+     * That is: check if there is a row with two Xs and an empty space
+     *
+     * @todo Build a Grid class that implements getPositionsContaining($value, $context = 'row', $no = 0)
+     *
+     * @return bool True if a winning position was found and blocked, false otherwise
+     */
+    private function block()
+    {
+        // Check rows
+        for ($i=0; $i<3; $i++) {
+            $numberOfXs = 0;
+            $numberOfEmptySpaces = 0;
+            for ($j=0; $j<3; $j++) {
+                if ($this->grid[$i][$j] == 'X') {
+                    $numberOfXs++;
+                } elseif (empty($this->grid[$i][$j])) {
+                    $numberOfEmptySpaces++;
+                    $emptySpaceRow = $i;
+                    $emptySpaceCol = $j;
+                }
+            }
+            if ($numberOfXs == 2 && $numberOfEmptySpaces == 1) {
+                // That's a win
+                $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
+                return true;
+            }
+        }
     }
 }
