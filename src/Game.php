@@ -79,6 +79,8 @@ class Game
             return;
         } elseif ($this->fork()) {
             return;
+        } elseif ($this->blockFork()) {
+            return;
         }
     }
 
@@ -124,10 +126,41 @@ class Game
                 if (empty($this->grid[$i][$j])) {
                     // Simulate a mark at this position
                     $this->grid[$i][$j] = 'O';
-                    if (sizeof($this->getWinningPositions('O')) > 1) {
+                    $leadsToFork = sizeof($this->getWinningPositions('O')) > 1;
+                    if ($leadsToFork) {
+                        // Leave the mark in place
                         return true;
                     }
 
+                    // Remove the mark
+                    $this->grid[$i][$j] = null;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if there's a fork opportunity for the opponent and blocks it
+     *
+     * @return bool Returns true if a position was found and blocked
+     */
+    private function blockFork()
+    {
+        for ($i=0; $i<3; $i++) {
+            for ($j=0; $j<3; $j++) {
+                if (empty($this->grid[$i][$j])) {
+                    // Simulate an opponent's mark at this position
+                    $this->grid[$i][$j] = 'X';
+                    $leadsToFork = sizeof($this->getWinningPositions('X')) > 1;
+                    if ($leadsToFork) {
+                        // Block it
+                        $this->grid[$i][$j] = 'O';
+                        return true;
+                    }
+
+                    // Remove the mark
                     $this->grid[$i][$j] = null;
                 }
             }
