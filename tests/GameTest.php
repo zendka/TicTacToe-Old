@@ -109,7 +109,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
      * @covers \Florin\TicTacToe\Game::computerMarks
      * @covers \Florin\TicTacToe\Game::win
      */
-    public function testComputerWinsWithARowMark()
+    public function testComputerWinsRow()
     {
         $winningGrid = [
             ['X', null, 'X'],
@@ -132,7 +132,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
      * @covers \Florin\TicTacToe\Game::computerMarks
      * @covers \Florin\TicTacToe\Game::win
      */
-    public function testComputerWinsWithAColumnMark()
+    public function testComputerWinsColumn()
     {
         $winningGrid = [
             ['X', null, 'O'],
@@ -155,7 +155,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
      * @covers \Florin\TicTacToe\Game::computerMarks
      * @covers \Florin\TicTacToe\Game::win
      */
-    public function testComputerWinsWithAFirstDiagonalMark()
+    public function testComputerWinsFirstDiagonal()
     {
         $winningGrid = [
             ['O', null, 'X'],
@@ -178,7 +178,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
      * @covers \Florin\TicTacToe\Game::computerMarks
      * @covers \Florin\TicTacToe\Game::win
      */
-    public function testComputerWinsWithASecondDiagonalMark()
+    public function testComputerWinsSecondDiagonal()
     {
         $winningGrid = [
             ['X', null, 'O'],
@@ -201,7 +201,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
      * @covers \Florin\TicTacToe\Game::computerMarks
      * @covers \Florin\TicTacToe\Game::win
      */
-    public function testComputerBlocksARow()
+    public function testComputerBlocksWinningRow()
     {
         $blockingGrid = [
             ['X', null, 'X'],
@@ -224,7 +224,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
      * @covers \Florin\TicTacToe\Game::computerMarks
      * @covers \Florin\TicTacToe\Game::win
      */
-    public function testComputerBlocksAColumn()
+    public function testComputerBlocksWinningColumn()
     {
         $blockingGrid = [
             ['X', null, null],
@@ -247,7 +247,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
      * @covers \Florin\TicTacToe\Game::computerMarks
      * @covers \Florin\TicTacToe\Game::win
      */
-    public function testComputerBlocksFirstDiagonal()
+    public function testComputerBlocksWinningFirstDiagonal()
     {
         $blockingGrid = [
             ['X', null, null],
@@ -270,7 +270,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
      * @covers \Florin\TicTacToe\Game::computerMarks
      * @covers \Florin\TicTacToe\Game::win
      */
-    public function testComputerBlocksSecondDiagonal()
+    public function testComputerBlocksWinningSecondDiagonal()
     {
         $blockingGrid = [
             [null, null, 'X'],
