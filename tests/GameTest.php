@@ -199,7 +199,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Florin\TicTacToe\Game::computerMarks
-     * @covers \Florin\TicTacToe\Game::win
+     * @covers \Florin\TicTacToe\Game::block
      */
     public function testComputerBlocksWinningRow()
     {
@@ -222,7 +222,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Florin\TicTacToe\Game::computerMarks
-     * @covers \Florin\TicTacToe\Game::win
+     * @covers \Florin\TicTacToe\Game::block
      */
     public function testComputerBlocksWinningColumn()
     {
@@ -245,7 +245,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Florin\TicTacToe\Game::computerMarks
-     * @covers \Florin\TicTacToe\Game::win
+     * @covers \Florin\TicTacToe\Game::block
      */
     public function testComputerBlocksWinningFirstDiagonal()
     {
@@ -268,7 +268,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Florin\TicTacToe\Game::computerMarks
-     * @covers \Florin\TicTacToe\Game::win
+     * @covers \Florin\TicTacToe\Game::block
      */
     public function testComputerBlocksWinningSecondDiagonal()
     {
