@@ -75,7 +75,7 @@ class Game
     {
         if ($this->win()) {
             return;
-        } elseif ($this->block()) {
+        } elseif ($this->blockWin()) {
             return;
         } elseif ($this->fork()) {
             return;
@@ -102,7 +102,7 @@ class Game
      *
      * @return bool Returns true if a position was found and blocked
      */
-    private function block()
+    private function blockWin()
     {
         if ($humanWinningPositions = $this->getWinningPositions('X')) {
             $this->grid[$humanWinningPositions[0]['row']][$humanWinningPositions[0]['col']] = 'O';
