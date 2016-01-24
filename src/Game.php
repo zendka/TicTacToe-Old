@@ -107,6 +107,26 @@ class Game
             }
         }
 
+        // Check columns
+        for ($j=0; $j<3; $j++) {
+            $numberOf0s = 0;
+            $numberOfEmptySpaces = 0;
+            for ($i=0; $i<3; $i++) {
+                if ($this->grid[$i][$j] == 'O') {
+                    $numberOf0s++;
+                } elseif (empty($this->grid[$i][$j])) {
+                    $numberOfEmptySpaces++;
+                    $emptySpaceRow = $i;
+                    $emptySpaceCol = $j;
+                }
+            }
+            if ($numberOf0s == 2 && $numberOfEmptySpaces == 1) {
+                // That's a win
+                $this->grid[$emptySpaceRow][$emptySpaceCol] = 'O';
+                return true;
+            }
+        }
+
         return false;
     }
 }
