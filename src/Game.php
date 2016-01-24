@@ -14,8 +14,7 @@
 class Game
 {
     /**
-     * Stores the current state of the grid
-     * @var [string]
+     * @var array $grid The the current state of the grid
      */
     private $grid = [
         [null, null, null],
@@ -26,7 +25,7 @@ class Game
     /**
      * Constructor
      *
-     * @param [string] the 3x3 starging grid containing 'X', '0' and null
+     * @param array $grid The 3x3 starting grid containing 'X', '0' and null
      */
     public function __construct($grid = null)
     {
@@ -36,9 +35,9 @@ class Game
     }
 
     /**
-     * Shows the current state of the grid
+     * Returns the grid
      *
-     * @return [string] the grid
+     * @return array
      */
     public function getGrid()
     {
@@ -46,11 +45,11 @@ class Game
     }
 
     /**
-     * Registers the player's mark
+     * Registers the player's mark in the grid
      *
-     * @param  row the row of the marked space
-     * @param  col the column of the market space
-     * @return bool true if the mark is valid, false otherwise
+     * @param  row  $row The row of the marked space
+     * @param  col  $col The column of the market space
+     * @return bool      True if the mark is valid, false otherwise
      */
     public function playerMarks($row, $col)
     {
@@ -59,7 +58,7 @@ class Game
             return false;
         }
 
-        // Check the mark is in an empty space
+        // Check if the mark is in an empty space
         if (!is_null($this->grid[$row][$col])) {
             return false;
         }
