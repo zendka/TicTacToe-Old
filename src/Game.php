@@ -83,6 +83,8 @@ class Game
      *
      * That is: check if there is a row with two Os and an empty space (to be marked)
      *
+     * @todo Build a Grid class that implements getPositionsContaining($value, $context = 'row', $no = 0)
+     *
      * @return bool
      */
     private function win()
