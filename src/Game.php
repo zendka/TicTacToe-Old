@@ -69,57 +69,74 @@ class Game
     }
 
     /**
-     * Calculates computer's best position and marks it on the grid
+     * Calculates computer's best position and marks it
      */
     public function computerMarks()
     {
-        if ($this->win('O')) {
+        if ($this->win()) {
             return;
-        } elseif ($this->win('X')) {
+        } elseif ($this->block()) {
             return;
         }
     }
 
     /**
-     * Checks if there's a winning position for a given player
+     * Checks if there's a winning position and marks it
      *
-     * That is: check if there is a line with with an empty space and two marks of that player
-     *
-     * @param  str  $player Which player to check: 'X' or 'O'
-     * @return bool         True if a winning position was found and marked, false otherwise
+     * @return bool Returns true if a position was found and marked
      */
-    private function win($player = 'O')
+    private function win()
     {
+        if ($computerWinningPositions = $this->getWinningPositions('O')) {
+            $this->grid[$computerWinningPositions[0]['row']][$computerWinningPositions[0]['col']] = 'O';
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if there's a winning position for the opponent and blocks it
+     *
+     * @return bool Returns true if a position was found and blocked
+     */
+    private function block()
+    {
+        if ($computerWinningPositions = $this->getWinningPositions('X')) {
+            $this->grid[$computerWinningPositions[0]['row']][$computerWinningPositions[0]['col']] = 'O';
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the winning positions for a given player
+     *
+     * A winning position is an empty space on a line with two of the player's marks
+     *
+     * @param  str   $player Which player to check: 'X' or 'O'
+     * @return array         Array with the winning positions.
+     *                       E.g. [['row' => 0, 'col' => 2], ['row' => 1, 'col' => 1]]
+     */
+    private function getWinningPositions($player = 'O')
+    {
+        $winningPositions = [];
+
         for ($i=0; $i<3; $i++) {
             for ($j=0; $j<3; $j++) {
                 if (empty($this->grid[$i][$j])) {
-                    // Check row
-                    if ($this->grid[$i][($j+1)%3] == $player && $this->grid[$i][($j+2)%3] == $player) {
-                        $this->grid[$i][$j] = 'O';
-                        return true;
-                    }
-
-                    // Check column
-                    if ($this->grid[($i+1)%3][$j] == $player && $this->grid[($i+2)%3][$j] == $player) {
-                        $this->grid[$i][$j] = 'O';
-                        return true;
-                    }
-
-                    // Check first diagonal
-                    if ($i == $j && $this->grid[($i+1)%3][($j+1)%3] == $player && $this->grid[($i+2)%3][($j+2)%3] == $player) {
-                        $this->grid[$i][$j] = 'O';
-                        return true;
-                    }
-
-                    // Check second diagonal
-                    if ($i == 2-$j && $this->grid[($i+1)%3][2-($j+1)%3] == $player && $this->grid[($i+2)%3][2-($j+2)%3] == $player) {
-                        $this->grid[$i][$j] = 'O';
-                        return true;
+                    $winningRow    = $this->grid[$i][($j+1)%3] == $player && $this->grid[$i][($j+2)%3] == $player;
+                    $winningColumn = $this->grid[($i+1)%3][$j] == $player && $this->grid[($i+2)%3][$j] == $player;
+                    $winningFirstDiagonal  = $i == $j   && $this->grid[($i+1)%3][($j+1)%3]   == $player && $this->grid[($i+2)%3][($j+2)%3]   == $player;
+                    $winningSecondDiagonal = $i == 2-$j && $this->grid[($i+1)%3][2-($j+1)%3] == $player && $this->grid[($i+2)%3][2-($j+2)%3] == $player;
+                    if ($winningRow || $winningColumn || $winningFirstDiagonal || $winningSecondDiagonal) {
+                        $winningPositions[] = array('row' => $i, 'col' => $j);
                     }
                 }
             }
         }
 
-        return false;
+        return $winningPositions;
     }
 }
