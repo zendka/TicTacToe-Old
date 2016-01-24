@@ -77,6 +77,8 @@ class Game
             return;
         } elseif ($this->block()) {
             return;
+        } elseif ($this->fork()) {
+            return;
         }
     }
 
@@ -105,6 +107,30 @@ class Game
         if ($humanWinningPositions = $this->getWinningPositions('X')) {
             $this->grid[$humanWinningPositions[0]['row']][$humanWinningPositions[0]['col']] = 'O';
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if there's a fork opportunity and marks it
+     *
+     * @return bool Returns true if a position was found and marked
+     */
+    private function fork()
+    {
+        for ($i=0; $i<3; $i++) {
+            for ($j=0; $j<3; $j++) {
+                if (empty($this->grid[$i][$j])) {
+                    // Simulate a mark at this position
+                    $this->grid[$i][$j] = 'O';
+                    if (sizeof($this->getWinningPositions('O')) > 1) {
+                        return true;
+                    }
+
+                    $this->grid[$i][$j] = null;
+                }
+            }
         }
 
         return false;
