@@ -13,7 +13,6 @@ class GameTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers \Florin\TicTacToe\Game::__construct
-     * @covers \Florin\TicTacToe\Game::getGrid
      */
     public function testGameStartsWithEmptyGridByDefault()
     {
@@ -27,6 +26,9 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($emptyGrid, $game->getGrid());
     }
 
+    /**
+     * @covers \Florin\TicTacToe\Game::__construct
+     */
     public function testGameStartsWithGivenGrid()
     {
         $grid = [
@@ -39,6 +41,9 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($grid, $game->getGrid());
     }
 
+    /**
+     * @covers \Florin\TicTacToe\Game::playerMarks
+     */
     public function testPlayersMarkIsRegisteredCorrectlyInEmptyGrid()
     {
         $game = new Game();
@@ -53,6 +58,9 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedGrid, $game->getGrid());
     }
 
+    /**
+     * @covers \Florin\TicTacToe\Game::playerMarks
+     */
     public function testPlayersMarkIsRegisteredCorrectlyInRandomGrid()
     {
         $grid = [
@@ -72,6 +80,9 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedGrid, $game->getGrid());
     }
 
+    /**
+     * @covers \Florin\TicTacToe\Game::playerMarks
+     */
     public function testPlayersMarkIsNotValidIfInAnAlreadyMarkedSpace()
     {
         $grid = [
@@ -84,6 +95,9 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($game->playerMarks(1, 0));
     }
 
+    /**
+     * @covers \Florin\TicTacToe\Game::playerMarks
+     */
     public function testPlayersMarkIsNotValidIfOutsideThe3x3Grid()
     {
         $game = new Game();
