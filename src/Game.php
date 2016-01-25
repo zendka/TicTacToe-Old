@@ -187,24 +187,23 @@ class Game
     }
 
     /**
-     * Checks if there's a fork opportunity for the opponent and blocks it
-     *
-     * @todo Choose the best position if several available
+     * Checks if there's a fork opportunity for the opponent and avoids it
      *
      * @return bool Returns true if a position was found and blocked
      */
     private function blockFork()
     {
+        $forkPositions = [];
+
         for ($i=0; $i<3; $i++) {
             for ($j=0; $j<3; $j++) {
                 if (empty($this->grid[$i][$j])) {
                     // Simulate an opponent's mark at this position
                     $this->grid[$i][$j] = 'X';
+
                     $leadsToFork = sizeof($this->getWinningPositions('X')) > 1;
                     if ($leadsToFork) {
-                        // Block it
-                        $this->grid[$i][$j] = 'O';
-                        return true;
+                        $forkPositions[] = array('row' => $i, 'col' => $j);
                     }
 
                     // Remove the mark
@@ -213,6 +212,16 @@ class Game
             }
         }
 
+        if (sizeof($forkPositions) == 1) {
+            // Block fork
+            $this->grid[$forkPositions[0]['row']][$forkPositions[0][$j]] = 'O';
+            return true;
+        } elseif (sizeof($forkPositions) > 1) {
+            $this->forceOpponent($forkPositions);
+            return true;
+        }
+
+        // No forks
         return false;
     }
 
@@ -307,5 +316,33 @@ class Game
         }
 
         return $winningPositions;
+    }
+
+    /**
+     * Force opponent to mark outside specific positions
+     *
+     * Do this by creating two in a row - a future winning position that the oponent has to counter
+     *
+     * @param  array Array with the specific positions.
+     *               E.g. [['row' => 0, 'col' => 2], ['row' => 1, 'col' => 1]]
+     */
+    private function forceOpponent($excludedPositions)
+    {
+        for ($i=0; $i<3; $i++) {
+            for ($j=0; $j<3; $j++) {
+                if (empty($this->grid[$i][$j])) {
+                    // Simulate a mark
+                    $this->grid[$i][$j] = 'O';
+
+                    // Check if there's winning position and if it is outside the excluded positions
+                    if ($this->getWinningPositions('O') && !in_array($this->getWinningPositions('O'), $excludedPositions)) {
+                        return;
+                    }
+
+                    // Remove mark
+                    $this->grid[$i][$j] = null;
+                }
+            }
+        }
     }
 }
