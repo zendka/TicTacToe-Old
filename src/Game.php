@@ -334,9 +334,19 @@ class Game
                     // Simulate a mark
                     $this->grid[$i][$j] = 'O';
 
-                    // Check if there's winning position and if it is outside the excluded positions
-                    if ($this->getWinningPositions('O') && !in_array($this->getWinningPositions('O'), $excludedPositions)) {
-                        return;
+                    // Check if there are winning position and if they are outside the excluded positions
+                    if ($winningPositions = $this->getWinningPositions('O')) {
+                        $areExcluded = false;
+                        foreach ($winningPositions as $winningPosition) {
+                            foreach ($excludedPositions as $excludedPosition) {
+                                if ($winningPosition == $excludedPosition) {
+                                    $areExcluded = true;
+                                }
+                            }
+                        }
+                        if (!$areExcluded) {
+                            return;
+                        }
                     }
 
                     // Remove mark
