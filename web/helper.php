@@ -36,6 +36,10 @@ if (isset($_GET['grid'])) {
 } else {
     // Start new game
     $game = new Florin\TicTacToe\Game();
+
+    if (isset($_GET['first']) && $_GET['first'] == 'computer') {
+        $game->computerMarks();
+    }
 }
 
 $grid = $game->getGrid();

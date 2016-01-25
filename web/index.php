@@ -75,7 +75,8 @@
         <input type="Submit" value="Submit">
     </form>
 
-    <p><a href=".">Restart</a></p>
+    <p><a href=".?first=human">Play again - human first</a></p>
+    <p><a href=".?first=computer">Play again - computer first</a></p>
 
     <p class="message"><?php if(isset($message)) {print $message;} ?></p>
 </body>
