@@ -214,7 +214,7 @@ class Game
 
         if (sizeof($forkPositions) == 1) {
             // Block fork
-            $this->grid[$forkPositions[0]['row']][$forkPositions[0][$j]] = 'O';
+            $this->grid[$forkPositions[0]['row']][$forkPositions[0]['col']] = 'O';
             return true;
         } elseif (sizeof($forkPositions) > 1) {
             $this->forceOpponent($forkPositions);
