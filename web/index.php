@@ -75,7 +75,7 @@
         <input type="Submit" value="Submit">
     </form>
 
-    <p><a href="/tests/8thLight/TicTacToe/web">Restart</a></p>
+    <p><a href=".">Restart</a></p>
 
     <p class="message"><?php if(isset($message)) {print $message;} ?></p>
 </body>
