@@ -164,7 +164,7 @@ class Game
             return;
         } elseif ($this->center($player)) {
             return;
-        } elseif ($this->corner()) {
+        } elseif ($this->corner($player)) {
             return;
         } elseif ($this->side()) {
             return;
@@ -316,25 +316,19 @@ class Game
     /**
      * Marks a corner if available
      *
+     * @param int $player Which player to play as: 0 or 1
+     *
      * @return bool Returns true if a corner has been marked, false otherwise
      */
-    private function corner()
+    private function corner($player)
     {
-        if (empty($this->grid[0][0])) {
-            $this->grid[0][0] = 'O';
+        if ($availableCorners = array_intersect(self::CORNERS, $this->availablePositions())) {
+            array_push($this->playersPositions[$player], $availableCorners[array_rand($availableCorners)]);
+            sort($this->playersPositions[$player]);
             return true;
-        } elseif (empty($this->grid[0][2])) {
-            $this->grid[0][2] = 'O';
-            return true;
-        } elseif (empty($this->grid[2][0])) {
-            $this->grid[2][0] = 'O';
-            return true;
-        } elseif (empty($this->grid[2][2])) {
-            $this->grid[2][2] = 'O';
-            return true;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     /**

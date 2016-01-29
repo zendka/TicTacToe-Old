@@ -376,28 +376,35 @@ class GameTest extends \PHPUnit_Framework_TestCase
         $game->computerPlays();
 
         // Just for visualisation
-        $expectedGrids = [];
-        $expectedGrids[] = [
-            'O' , null, null,
-            'X' , 'O' , 'X',
-            null, null, null
+        $expectedGrids = [
+            [
+                'O' , null, null,
+                'X' , 'O' , 'X',
+                null, null, null
+            ],
+            [
+                null, null, 'O',
+                'X' , 'O' , 'X',
+                null, null, null
+            ],
+            [
+                null, null, null,
+                'X' , 'O' , 'X',
+                null, null, 'O'
+            ],
+            [
+                null, null, null,
+                'X' , 'O' , 'X',
+                'O' , null, null
+            ]
         ];
-        $expectedGrids[] = [
-            null, null, 'O',
-            'X' , 'O' , 'X',
-            null, null, null
+        $expectedPositions = [
+            [[3, 5], [0, 4]],
+            [[3, 5], [2, 4]],
+            [[3, 5], [4, 6]],
+            [[3, 5], [4, 8]]
         ];
-        $expectedGrids[] = [
-            null, null, null,
-            'X' , 'O' , 'X',
-            null, null, 'O'
-        ];
-        $expectedGrids[] = [
-            null, null, null,
-            'X' , 'O' , 'X',
-            'O' , null, null
-        ];
-        $this->assertTrue(in_array($game->getPlayersPositions(), $expectedGrids));
+        $this->assertTrue(in_array($game->getPlayersPositions(), $expectedPositions));
     }
 
     /**
