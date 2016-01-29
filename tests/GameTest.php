@@ -26,14 +26,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
      */
     public function testGameStartsWithGivenGrid()
     {
-        $grid = [
-            ['O' , null, 'O' ],
-            [null, 'X' , 'X' ],
-            [null, null, null]
-        ];
-        $game = new Game($grid);
+        $playersPositions = [[4, 5], [0, 2]];
+        $game = new Game($playersPositions);
 
-        $this->assertEquals($grid, $game->getGrid());
+        $this->assertEquals($playersPositions, $game->getPlayersPositions());
     }
 
     /**
