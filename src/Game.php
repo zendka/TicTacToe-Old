@@ -368,6 +368,11 @@ class Game
         foreach ($availablePositions as $position) {
             if (count(array_intersect($this->playersPositions[$player], $this->positionsOnSameRow($position))) == 2) {
                 $winningPositions[] = $position;
+                continue;
+            }
+            if (count(array_intersect($this->playersPositions[$player], $this->positionsOnSameColumn($position))) == 2) {
+                $winningPositions[] = $position;
+                continue;
             }
         }
 
@@ -396,6 +401,18 @@ class Game
         $firstPositionInRow = $position - ($position%3);
 
         return [$firstPositionInRow, $firstPositionInRow+1, $firstPositionInRow+2];
+    }
+
+    /**
+     * Returns the positions on the same column as the give position
+     *
+     * @param int $position A position
+     *
+     * @return [int]
+     */
+    private function positionsOnSameColumn($position)
+    {
+        return [$position, ($position+3) % 9, ($position+6) % 9];
     }
 
     /**
