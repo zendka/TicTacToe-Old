@@ -33,10 +33,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::win
      */
-    public function testComputerWinsRow()
+    public function testComputerWinsRowOpportunity()
     {
         // Just for visualisation
         $winningGrid = [
@@ -58,10 +58,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::win
      */
-    public function testComputerWinsColumn()
+    public function testComputerWinsColumnOpportunity()
     {
         // Just for visualisation
         $winningGrid = [
@@ -83,10 +83,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::win
      */
-    public function testComputerWinsFirstDiagonal()
+    public function testComputerWinsFirstDiagonalOpportunity()
     {
         // Just for visualisation
         $winningGrid = [
@@ -108,10 +108,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::win
      */
-    public function testComputerWinsSecondDiagonal()
+    public function testComputerWinsSecondDiagonalOpportunity()
     {
         // Just for visualisation
         $winningGrid = [
@@ -133,10 +133,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::blockWin
      */
-    public function testComputerBlocksWinningRow()
+    public function testComputerBlocksOpponentsWinningRowOpportunity()
     {
         $blockingGrid = [
             ['X' , null, 'X' ],
@@ -156,10 +156,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::blockWin
      */
-    public function testComputerBlocksWinningColumn()
+    public function testComputerBlocksOpponentsWinningColumnOpportunity()
     {
         $blockingGrid = [
             ['X' , null, null],
@@ -179,10 +179,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::blockWin
      */
-    public function testComputerBlocksWinningFirstDiagonal()
+    public function testComputerBlocksOpponentsWinningFirstDiagonalOpportunity()
     {
         $blockingGrid = [
             ['X' , null, null],
@@ -202,10 +202,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::blockWin
      */
-    public function testComputerBlocksWinningSecondDiagonal()
+    public function testComputerBlocksOpponentsWinningSecondDiagonalOpportunity()
     {
         $blockingGrid = [
             [null, null, 'X' ],
@@ -225,7 +225,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::fork
      */
     public function testComputerForks()
@@ -248,10 +248,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::blockFork
      */
-    public function testComputerBlocksFork()
+    public function testComputerBlocksOpponentsFork()
     {
         $grid = [
             ['X' , 'O' , 'X' ],
@@ -271,11 +271,11 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::blockFork
      * @covers \Florin\TicTacToe\Game::forceOpponent
      */
-    public function testComputerBlocksMultipleForks()
+    public function testComputerBlocksOpponentsMultipleForks()
     {
         $grid = [
             ['X' , null, null],
@@ -295,11 +295,11 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::blockFork
      * @covers \Florin\TicTacToe\Game::forceOpponent
      */
-    public function testComputerBlocksMultipleForks2()
+    public function testComputerBlocksOpponentsMultipleForks2()
     {
         $grid = [
             [null, null, 'X' ],
@@ -319,10 +319,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::center
      */
-    public function testComputerMarksTheCenter()
+    public function testComputerPlaysTheCenter()
     {
         $grid = [
             ['X' , null, null],
@@ -342,10 +342,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::corner
      */
-    public function testComputerMarksCorner()
+    public function testComputerPlaysACorner()
     {
         $grid = [
             [null, null, null],
@@ -381,10 +381,10 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::side
      */
-    public function testComputerMarksSide()
+    public function testComputerPlaysASide()
     {
         $grid = [
             ['X' , 'O' , 'X' ],
@@ -410,7 +410,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::computerWon
      */
     public function testComputerWins()
@@ -428,7 +428,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::computerWon
      */
     public function testComputerHasntWon()
@@ -444,7 +444,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerMarks
+     * @covers \Florin\TicTacToe\Game::computerPlays
      * @covers \Florin\TicTacToe\Game::isOver
      */
     public function testGameIsOver()
