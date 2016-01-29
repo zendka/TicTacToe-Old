@@ -151,7 +151,7 @@ class Game
 
         if ($this->win($player)) {
             return;
-        } elseif ($this->blockWin()) {
+        } elseif ($this->blockWin($player)) {
             return;
         } elseif ($this->fork()) {
             return;
@@ -211,12 +211,16 @@ class Game
     /**
      * Checks if there's a winning position for the opponent and blocks it
      *
-     * @return bool Returns true if a position was found and blocked
+     * @param int $player Which player to play as: 0 or 1
+     *
+     * @return bool Returns true if successful, false otherwise
      */
-    private function blockWin()
+    private function blockWin($player)
     {
-        if ($humanWinningPositions = $this->getWinningPositions('X')) {
-            $this->grid[$humanWinningPositions[0]['row']][$humanWinningPositions[0]['col']] = 'O';
+        $opponent = self::opponent($player);
+        if ($opponentsWinningPositions = $this->getWinningPositions($opponent)) {
+            $this->playersPositions[$player][] = $opponentsWinningPositions[array_rand($opponentsWinningPositions)];
+            sort($this->playersPositions[$player]);
             return true;
         }
 
@@ -425,9 +429,21 @@ class Game
     }
 
     /**
+     * Returns the player's opponent
+     *
+     * @param int $player The player
+     *
+     * @return [int] The opponent
+     */
+    private function opponent($player)
+    {
+        return 1 - $player;
+    }
+
+    /**
      * Force opponent to mark outside specific positions
      *
-     * Do this by creating two in a row - a future winning position that the oponent has to counter
+     * Do this by creating two in a row - a future winning position that the opponent has to counter
      *
      * @param  array Array with the specific positions.
      *               E.g. [['row' => 0, 'col' => 2], ['row' => 1, 'col' => 1]]
