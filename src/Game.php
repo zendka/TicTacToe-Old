@@ -166,7 +166,7 @@ class Game
             return;
         } elseif ($this->corner($player)) {
             return;
-        } elseif ($this->side()) {
+        } elseif ($this->side($player)) {
             return;
         }
     }
@@ -334,25 +334,19 @@ class Game
     /**
      * Marks a side if available
      *
+     * @param int $player Which player to play as: 0 or 1
+     *
      * @return bool Returns true if a side has been marked, false otherwise
      */
-    private function side()
+    private function side($player)
     {
-        if (empty($this->grid[0][1])) {
-            $this->grid[0][1] = 'O';
+        if ($availableSides = array_intersect(self::SIDES, $this->availablePositions())) {
+            array_push($this->playersPositions[$player], $availableSides[array_rand($availableSides)]);
+            sort($this->playersPositions[$player]);
             return true;
-        } elseif (empty($this->grid[1][0])) {
-            $this->grid[1][0] = 'O';
-            return true;
-        } elseif (empty($this->grid[1][2])) {
-            $this->grid[1][2] = 'O';
-            return true;
-        } elseif (empty($this->grid[2][1])) {
-            $this->grid[2][1] = 'O';
-            return true;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     /**
