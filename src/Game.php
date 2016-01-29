@@ -374,6 +374,14 @@ class Game
                 $winningPositions[] = $position;
                 continue;
             }
+            if (in_array($position, self::DIAGONAL1) && count(array_intersect($this->playersPositions[$player], self::DIAGONAL1)) == 2) {
+                $winningPositions[] = $position;
+                continue;
+            }
+            if (in_array($position, self::DIAGONAL2) && count(array_intersect($this->playersPositions[$player], self::DIAGONAL2)) == 2) {
+                $winningPositions[] = $position;
+                continue;
+            }
         }
 
         return $winningPositions;

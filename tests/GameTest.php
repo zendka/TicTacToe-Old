@@ -88,21 +88,23 @@ class GameTest extends \PHPUnit_Framework_TestCase
      */
     public function testComputerWinsFirstDiagonal()
     {
+        // Just for visualisation
         $winningGrid = [
             ['O' , null, 'X' ],
             ['X' , 'O' , 'X' ],
             [null, null, null]
         ];
-        $game = new Game($winningGrid);
+        $game = new Game([[2, 3, 5], [0, 4]]);
 
-        $game->computerMarks();
+        $game->computerPlays();
 
+        // Just for visualisation
         $expectedGrid = [
             ['O' , null, 'X' ],
             ['X' , 'O' , 'X' ],
             [null, null, 'O' ]
         ];
-        $this->assertEquals($expectedGrid, $game->getGrid());
+        $this->assertEquals([[2, 3, 5], [0, 4, 8]], $game->getPlayersPositions());
     }
 
     /**
@@ -111,21 +113,23 @@ class GameTest extends \PHPUnit_Framework_TestCase
      */
     public function testComputerWinsSecondDiagonal()
     {
+        // Just for visualisation
         $winningGrid = [
             ['X' , null, 'O' ],
             ['X' , 'O' , 'X' ],
             [null, null, null]
         ];
-        $game = new Game($winningGrid);
+        $game = new Game([[0, 3, 5], [2, 4]]);
 
-        $game->computerMarks();
+        $game->computerPlays();
 
+        // Just for visualisation
         $expectedGrid = [
             ['X' , null, 'O' ],
             ['X' , 'O' , 'X' ],
             ['O' , null, null]
         ];
-        $this->assertEquals($expectedGrid, $game->getGrid());
+        $this->assertEquals([[0, 3, 5], [2, 4, 6]], $game->getPlayersPositions());
     }
 
     /**
