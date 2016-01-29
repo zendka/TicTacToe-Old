@@ -27,9 +27,11 @@ class Game
     /** The grid's side positions */
     const SIDES     = [1, 3, 5, 7];
     /** The grid's first diagonal positions */
-    const DIAGONAL1 = [0,4,8];
+    const DIAGONAL1 = [0, 4, 8];
     /** The grid's second diagonal positions */
-    const DIAGONAL2 = [2,4,6];
+    const DIAGONAL2 = [2, 4, 6];
+    /** The grid's central position */
+    const CENTER    = 4;
 
     /** @var array Players' positions. E.g. [[1, 3, 4], [2, 6, 7]] */
     private $playersPositions = [[], []];
@@ -160,7 +162,7 @@ class Game
             return;
         } elseif ($this->blockFork($player)) {
             return;
-        } elseif ($this->center()) {
+        } elseif ($this->center($player)) {
             return;
         } elseif ($this->corner()) {
             return;
@@ -297,16 +299,18 @@ class Game
     /**
      * Marks the center if available
      *
+     * @param int $player Which player to play as: 0 or 1
+     *
      * @return bool Returns true if the center has been marked, false otherwise
      */
-    private function center()
+    private function center($player)
     {
-        if (empty($this->grid[1][1])) {
-            $this->grid[1][1] = 'O';
+        if (in_array(self::CENTER, $this->availablePositions())) {
+            array_push($this->playersPositions[$player], self::CENTER);
             return true;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     /**
