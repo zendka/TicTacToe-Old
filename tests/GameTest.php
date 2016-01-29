@@ -14,7 +14,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \Florin\TicTacToe\Game::__construct
      */
-    public function testGameStartsWithEmptyGridByDefault()
+    public function testGameInitialisesWithEmptyGridByDefault()
     {
         $game = new Game();
 
@@ -24,7 +24,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \Florin\TicTacToe\Game::__construct
      */
-    public function testGameStartsWithGivenGrid()
+    public function testGameInitialisesWithGivenConfiguration()
     {
         $playersPositions = [[4, 5], [0, 2]];
         $game = new Game($playersPositions);
