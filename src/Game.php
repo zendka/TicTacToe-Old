@@ -153,7 +153,7 @@ class Game
             return;
         } elseif ($this->blockWin($player)) {
             return;
-        } elseif ($this->fork()) {
+        } elseif ($this->fork($player)) {
             return;
         } elseif ($this->blockFork()) {
             return;
@@ -230,24 +230,23 @@ class Game
     /**
      * Checks if there's a fork opportunity and marks it
      *
+     * @param int $player Which player to play as: 0 or 1
+     *
      * @return bool Returns true if a position was found and marked
      */
-    private function fork()
+    private function fork($player)
     {
-        for ($i=0; $i<3; $i++) {
-            for ($j=0; $j<3; $j++) {
-                if (empty($this->grid[$i][$j])) {
-                    // Simulate a mark at this position
-                    $this->grid[$i][$j] = 'O';
-                    $leadsToFork = sizeof($this->getWinningPositions('O')) > 1;
-                    if ($leadsToFork) {
-                        // Leave the mark in place
-                        return true;
-                    }
+        $availablePositions = $this->availablePositions();
+        foreach ($availablePositions as $position) {
+            // Simulate a mark at this position
+            array_push($this->playersPositions[$player], $position);
 
-                    // Remove the mark
-                    $this->grid[$i][$j] = null;
-                }
+            if (sizeof($this->getWinningPositions($player)) > 1) {
+                // Leave the mark in place
+                return true;
+            } else {
+                // Remove the mark
+                array_pop($this->playersPositions[$player]);
             }
         }
 
