@@ -18,12 +18,7 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         $game = new Game();
 
-        $emptyGrid = [
-            [null, null, null],
-            [null, null, null],
-            [null, null, null]
-        ];
-        $this->assertEquals($emptyGrid, $game->getGrid());
+        $this->assertEquals([[], []], $game->getPlayersPositions());
     }
 
     /**

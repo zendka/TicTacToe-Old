@@ -4,23 +4,38 @@
  * Represents a Tic-tac-toe game:
  *
  * Tic-tac-toe is played by two players who take turns marking the spaces in a 3×3 grid
- * using X (for the 1st player) and O (for the 2nd)
+ * using X (for player 1) and O (for player 2)
  * The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins the game.
  *
- * Assumption: the 1st player (using X) is always the human
+ * Convention: the grid's positions are identified by numbers from 0 to 8. See self::GRID
  *
- * @package    TicTacToe
+ * @package TicTacToe
  */
 class Game
 {
-    /**
-     * @var array $grid The the current state of the grid
-     */
-    private $grid = [
-        [null, null, null],
-        [null, null, null],
-        [null, null, null]
+    /** The grid's positions */
+    const GRID = [
+        0, 1, 2,
+        3, 4, 5,
+        6, 7, 8
     ];
+    /** The grid's corner positions */
+    const CORNERS   = [0, 2, 6, 8];
+    /** The grid's side positions */
+    const SIDES     = [1, 3, 5, 7];
+    /** The grid's first diagonal positions */
+    const DIAGONAL1 = [0,4,8];
+    /** The grid's second diagonal positions */
+    const DIAGONAL2 = [2,4,6];
+
+    /** @var array Players' positions. E.g. [[1, 3, 4], [2, 6, 7]] */
+    private $playersPositions = [[], []];
+
+    const HUMAN_VS_COMPUTER    = 0;
+    const HUMAN_VS_HUMAN       = 1;
+    const COMPUTER_VS_COMPUTER = 2;
+    /** @var int Game type: 0 for human vs computer, 1 for human vs human and 2 for computer vs computer */
+    private $gameType = self::HUMAN_VS_COMPUTER;
 
     /**
      * @var bool $computerWon True if the computer won, false otherwise
@@ -30,23 +45,65 @@ class Game
     /**
      * Constructor
      *
-     * @param array $grid The 3x3 starting grid containing 'X', 'O' and null
+     * @param array $playersPositions Players' positions. E.g. [[1, 3, 4], [2, 6, 7]]
+     * @param int   $gameType         Game type: 0 for human vs computer, 1 for human vs human and 2 for computer vs computer
      */
-    public function __construct($grid = null)
+    public function __construct($playersPositions = [[], []], $gameType = self::HUMAN_VS_COMPUTER)
     {
-        if ($grid) {
-            $this->grid = $grid;
+        if (!self::validGameType($gameType) || !self::validPlayersPositions($playersPositions)) {
+            throw new \InvalidArgumentException('Game::__construct was called with invalid arguments.');
+        }
+
+        $this->gameType = $gameType;
+        $this->playersPositions = $playersPositions;
+    }
+
+    /**
+     * Checks if the given parameter represents valid players positions
+     *
+     * @param array $playersPositions Players positions
+     *
+     * @return bool
+     */
+    private static function validPlayersPositions($playersPositions)
+    {
+        if (!isset($playersPositions[0]) || !isset($playersPositions[1])) {
+            return false;
+        } elseif (array_intersect($playersPositions[0], $playersPositions[1])) {
+            // Players positions overlap
+            return false;
+        } elseif (array_diff($playersPositions[0] + $playersPositions[1], self::GRID)) {
+            // Players positions are outside the grid
+            return false;
+        } else {
+            return true;
         }
     }
 
     /**
-     * Returns the grid
+     * Checks if game type is valid
      *
-     * @return array
+     * @param int $gameType The game type
+     *
+     * @return bool
      */
-    public function getGrid()
+    private static function validGameType($gameType)
     {
-        return $this->grid;
+        if (in_array($gameType, [self::HUMAN_VS_COMPUTER, self::HUMAN_VS_HUMAN, self::COMPUTER_VS_COMPUTER])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Returns players positions
+     *
+     * @return array Players' positions. E.g. [[1, 3, 4], [2, 6, 7]]
+     */
+    public function getPlayersPositions()
+    {
+        return $this->playersPositions;
     }
 
     /**
