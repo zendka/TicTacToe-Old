@@ -200,6 +200,7 @@ class Game
     {
         if ($winningPositions = $this->getWinningPositions($player)) {
             $this->playersPositions[$player][] = $winningPositions[array_rand($winningPositions)];
+            sort($this->playersPositions[$player]);
             $this->winner = $player;
             return true;
         }

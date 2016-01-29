@@ -39,22 +39,22 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testComputerWinsRowOpportunity()
     {
         // Just for visualisation
-        $winningGrid = [
-            ['X' , null, 'X' ],
-            ['O' , null, 'O' ],
-            [null, 'X' , null]
+        $grid = [
+            'X' , null, 'X',
+            'O' , null, 'O',
+            null, 'X' , null
         ];
-        $game = new Game([[0, 2, 7], [3, 5]]);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrid = [
-            ['X' , null, 'X' ],
-            ['O' , 'O' , 'O' ],
-            [null, 'X' , null]
+            'X' , null, 'X',
+            'O' , 'O' , 'O',
+            null, 'X' , null
         ];
-        $this->assertEquals([[0, 2, 7], [3, 5, 4]], $game->getPlayersPositions());
+        $this->assertEquals([array_keys($expectedGrid, 'X'), array_keys($expectedGrid, 'O')], $game->getPlayersPositions());
     }
 
     /**
@@ -64,22 +64,22 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testComputerWinsColumnOpportunity()
     {
         // Just for visualisation
-        $winningGrid = [
-            ['X' , null, 'O' ],
-            ['X' , 'X' , 'O' ],
-            [null, null, null]
+        $grid = [
+            'X' , null, 'O',
+            'X' , 'X' , 'O',
+            null, null, null
         ];
-        $game = new Game([[0, 3, 4], [2, 5]]);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrid = [
-            ['X' , null, 'O' ],
-            ['X' , 'X' , 'O' ],
-            [null, null, 'O' ]
+            'X' , null, 'O',
+            'X' , 'X' , 'O',
+            null, null, 'O'
         ];
-        $this->assertEquals([[0, 3, 4], [2, 5, 8]], $game->getPlayersPositions());
+        $this->assertEquals([array_keys($expectedGrid, 'X'), array_keys($expectedGrid, 'O')], $game->getPlayersPositions());
     }
 
     /**
@@ -89,22 +89,22 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testComputerWinsFirstDiagonalOpportunity()
     {
         // Just for visualisation
-        $winningGrid = [
-            ['O' , null, 'X' ],
-            ['X' , 'O' , 'X' ],
-            [null, null, null]
+        $grid = [
+            'O' , null, 'X',
+            'X' , 'O' , 'X',
+            null, null, null
         ];
-        $game = new Game([[2, 3, 5], [0, 4]]);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrid = [
-            ['O' , null, 'X' ],
-            ['X' , 'O' , 'X' ],
-            [null, null, 'O' ]
+            'O' , null, 'X',
+            'X' , 'O' , 'X',
+            null, null, 'O'
         ];
-        $this->assertEquals([[2, 3, 5], [0, 4, 8]], $game->getPlayersPositions());
+        $this->assertEquals([array_keys($expectedGrid, 'X'), array_keys($expectedGrid, 'O')], $game->getPlayersPositions());
     }
 
     /**
@@ -114,22 +114,22 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testComputerWinsSecondDiagonalOpportunity()
     {
         // Just for visualisation
-        $winningGrid = [
-            ['X' , null, 'O' ],
-            ['X' , 'O' , 'X' ],
-            [null, null, null]
+        $grid = [
+            'X' , null, 'O',
+            'X' , 'O' , 'X',
+            null, null, null
         ];
-        $game = new Game([[0, 3, 5], [2, 4]]);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrid = [
-            ['X' , null, 'O' ],
-            ['X' , 'O' , 'X' ],
-            ['O' , null, null]
+            'X' , null, 'O',
+            'X' , 'O' , 'X',
+            'O' , null, null
         ];
-        $this->assertEquals([[0, 3, 5], [2, 4, 6]], $game->getPlayersPositions());
+        $this->assertEquals([array_keys($expectedGrid, 'X'), array_keys($expectedGrid, 'O')], $game->getPlayersPositions());
     }
 
     /**
@@ -139,22 +139,22 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testComputerBlocksOpponentsWinningRowOpportunity()
     {
         // Just for visualisation
-        $blockingGrid = [
-            ['X' , null, 'X' ],
-            ['O' , null, null],
-            [null, 'X' , 'O' ]
+        $grid = [
+            'X' , null, 'X',
+            'O' , null, null,
+            null, 'X' , 'O'
         ];
-        $game = new Game($blockingGrid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrid = [
-            ['X' , 'O' , 'X' ],
-            ['O' , null, null],
-            [null, 'X' , 'O' ]
+            'X' , 'O' , 'X',
+            'O' , null, null,
+            null, 'X' , 'O'
         ];
-        $this->assertEquals($expectedGrid, $game->getPlayersPositions());
+        $this->assertEquals([array_keys($expectedGrid, 'X'), array_keys($expectedGrid, 'O')], $game->getPlayersPositions());
     }
 
     /**
@@ -164,22 +164,22 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testComputerBlocksOpponentsWinningColumnOpportunity()
     {
         // Just for visualisation
-        $blockingGrid = [
-            ['X' , null, null],
-            ['X' , 'O' , 'X' ],
-            [null, null, 'O' ]
+        $grid = [
+            'X' , null, null,
+            'X' , 'O' , 'X',
+            null, null, 'O'
         ];
-        $game = new Game($blockingGrid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrid = [
-            ['X' , null, null],
-            ['X' , 'O' , 'X' ],
-            ['O' , null, 'O' ]
+            'X' , null, null,
+            'X' , 'O' , 'X',
+            'O' , null, 'O'
         ];
-        $this->assertEquals($expectedGrid, $game->getPlayersPositions());
+        $this->assertEquals([array_keys($expectedGrid, 'X'), array_keys($expectedGrid, 'O')], $game->getPlayersPositions());
     }
 
     /**
@@ -189,22 +189,22 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testComputerBlocksOpponentsWinningFirstDiagonalOpportunity()
     {
         // Just for visualisation
-        $blockingGrid = [
-            ['X' , null, null],
-            ['X' , null, 'O' ],
-            ['O' , null, 'X' ]
+        $grid = [
+            'X' , null, null,
+            'X' , null, 'O',
+            'O' , null, 'X'
         ];
-        $game = new Game($blockingGrid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrid = [
-            ['X' , null, null],
-            ['X' , 'O' , 'O' ],
-            ['O' , null, 'X' ]
+            'X' , null, null,
+            'X' , 'O' , 'O',
+            'O' , null, 'X'
         ];
-        $this->assertEquals($expectedGrid, $game->getPlayersPositions());
+        $this->assertEquals([array_keys($expectedGrid, 'X'), array_keys($expectedGrid, 'O')], $game->getPlayersPositions());
     }
 
     /**
@@ -214,22 +214,22 @@ class GameTest extends \PHPUnit_Framework_TestCase
     public function testComputerBlocksOpponentsWinningSecondDiagonalOpportunity()
     {
         // Just for visualisation
-        $blockingGrid = [
-            [null, null, 'X' ],
-            [null, null, 'O' ],
-            ['X' , 'X' , 'O' ]
+        $grid = [
+            null, null, 'X',
+            null, null, 'O',
+            'X' , 'X' , 'O'
         ];
-        $game = new Game($blockingGrid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrid = [
-            [null, null, 'X' ],
-            [null, 'O' , 'O' ],
-            ['X' , 'X' , 'O' ]
+            null, null, 'X',
+            null, 'O' , 'O',
+            'X' , 'X' , 'O'
         ];
-        $this->assertEquals($expectedGrid, $game->getPlayersPositions());
+        $this->assertEquals([array_keys($expectedGrid, 'X'), array_keys($expectedGrid, 'O')], $game->getPlayersPositions());
     }
 
     /**
@@ -240,21 +240,21 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         // Just for visualisation
         $grid = [
-            ['O' , 'X' , 'X' ],
-            ['X' , null, null],
-            [null, 'O' , null]
+            'O' , 'X' , 'X',
+            'X' , null, null,
+            null, 'O' , null
         ];
-        $game = new Game($grid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrid = [
-            ['O' , 'X' , 'X' ],
-            ['X' , null, null],
-            [null, 'O' , 'O' ]
+            'O' , 'X' , 'X',
+            'X' , null, null,
+            null, 'O' , 'O'
         ];
-        $this->assertEquals($expectedGrid, $game->getPlayersPositions());
+        $this->assertEquals([array_keys($expectedGrid, 'X'), array_keys($expectedGrid, 'O')], $game->getPlayersPositions());
     }
 
     /**
@@ -265,21 +265,21 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         // Just for visualisation
         $grid = [
-            ['X' , 'O' , 'X' ],
-            [null, null, null],
-            [null, null, null]
+            'X' , 'O' , 'X',
+            null, null, null,
+            null, null, null
         ];
-        $game = new Game($grid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrid = [
-            ['X' , 'O' , 'X' ],
-            [null, 'O' , null],
-            [null, null, null]
+            'X' , 'O' , 'X',
+            null, 'O' , null,
+            null, null, null
         ];
-        $this->assertEquals($expectedGrid, $game->getPlayersPositions());
+        $this->assertEquals([array_keys($expectedGrid, 'X'), array_keys($expectedGrid, 'O')], $game->getPlayersPositions());
     }
 
     /**
@@ -291,21 +291,21 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         // Just for visualisation
         $grid = [
-            ['X' , null, null],
-            [null, 'O' , null],
-            [null, null, 'X' ]
+            'X' , null, null,
+            null, 'O' , null,
+            null, null, 'X'
         ];
-        $game = new Game($grid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrid = [
-            ['X' , 'O' , null],
-            [null, 'O' , null],
-            [null, null, 'X' ]
+            'X' , 'O' , null,
+            null, 'O' , null,
+            null, null, 'X'
         ];
-        $this->assertEquals($expectedGrid, $game->getPlayersPositions());
+        $this->assertEquals([array_keys($expectedGrid, 'X'), array_keys($expectedGrid, 'O')], $game->getPlayersPositions());
     }
 
     /**
@@ -317,21 +317,21 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         // Just for visualisation
         $grid = [
-            [null, null, 'X' ],
-            [null, 'O' , null],
-            ['X' , null, null]
+            null, null, 'X',
+            null, 'O' , null,
+            'X' , null, null
         ];
-        $game = new Game($grid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrid = [
-            [null, 'O' , 'X' ],
-            [null, 'O' , null],
-            ['X' , null, null]
+            null, 'O' , 'X',
+            null, 'O' , null,
+            'X' , null, null
         ];
-        $this->assertEquals($expectedGrid, $game->getPlayersPositions());
+        $this->assertEquals([array_keys($expectedGrid, 'X'), array_keys($expectedGrid, 'O')], $game->getPlayersPositions());
     }
 
     /**
@@ -342,21 +342,21 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         // Just for visualisation
         $grid = [
-            ['X' , null, null],
-            [null, null, null],
-            [null, null, null]
+            'X' , null, null,
+            null, null, null,
+            null, null, null
         ];
-        $game = new Game($grid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrid = [
-            ['X' , null, null],
-            [null, 'O' , null],
-            [null, null, null]
+            'X' , null, null,
+            null, 'O' , null,
+            null, null, null
         ];
-        $this->assertEquals($expectedGrid, $game->getPlayersPositions());
+        $this->assertEquals([array_keys($expectedGrid, 'X'), array_keys($expectedGrid, 'O')], $game->getPlayersPositions());
     }
 
     /**
@@ -367,35 +367,35 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         // Just for visualisation
         $grid = [
-            [null, null, null],
-            ['X' , 'O' , 'X' ],
-            [null, null, null]
+            null, null, null,
+            'X' , 'O' , 'X',
+            null, null, null
         ];
-        $game = new Game($grid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrids = [];
         $expectedGrids[] = [
-            ['O' , null, null],
-            ['X' , 'O' , 'X' ],
-            [null, null, null]
+            'O' , null, null,
+            'X' , 'O' , 'X',
+            null, null, null
         ];
         $expectedGrids[] = [
-            [null, null, 'O' ],
-            ['X' , 'O' , 'X' ],
-            [null, null, null]
+            null, null, 'O',
+            'X' , 'O' , 'X',
+            null, null, null
         ];
         $expectedGrids[] = [
-            [null, null, null],
-            ['X' , 'O' , 'X' ],
-            [null, null, 'O' ]
+            null, null, null,
+            'X' , 'O' , 'X',
+            null, null, 'O'
         ];
         $expectedGrids[] = [
-            [null, null, null],
-            ['X' , 'O' , 'X' ],
-            ['O' , null, null]
+            null, null, null,
+            'X' , 'O' , 'X',
+            'O' , null, null
         ];
         $this->assertTrue(in_array($game->getPlayersPositions(), $expectedGrids));
     }
@@ -408,25 +408,25 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         // Just for visualisation
         $grid = [
-            ['X' , 'O' , 'X' ],
-            [null, 'X' , null],
-            ['O' , 'X' , 'O' ]
+            'X' , 'O' , 'X',
+            null, 'X' , null,
+            'O' , 'X' , 'O'
         ];
-        $game = new Game($grid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
         // Just for visualisation
         $expectedGrids = [];
         $expectedGrids[] = [
-            ['X' , 'O' , 'X' ],
-            [null, 'X' , 'O' ],
-            ['O' , 'X' , 'O' ]
+            'X' , 'O' , 'X',
+            null, 'X' , 'O',
+            'O' , 'X' , 'O'
         ];
         $expectedGrids[] = [
-            ['X' , 'O' , 'X' ],
-            ['O' , 'X' , null],
-            ['O' , 'X' , 'O' ]
+            'X' , 'O' , 'X',
+            'O' , 'X' , null,
+            'O' , 'X' , 'O'
         ];
         $this->assertTrue(in_array($game->getPlayersPositions(), $expectedGrids));
     }
@@ -439,11 +439,11 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         // Just for visualisation
         $grid = [
-            ['X' , 'O' , 'X' ],
-            [null, 'O' , null],
-            ['X' , null, null]
+            'X' , 'O' , 'X',
+            null, 'O' , null,
+            'X' , null, null
         ];
-        $game = new Game($grid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
@@ -458,11 +458,11 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         // Just for visualisation
         $grid = [
-            ['X' , 'O' , 'X' ],
-            [null, 'O' , null],
-            ['X' , null, null]
+            'X' , 'O' , 'X',
+            null, 'O' , null,
+            'X' , null, null
         ];
-        $game = new Game($grid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $this->assertFalse($game->computerWon());
     }
@@ -475,11 +475,11 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         // Just for visualisation
         $grid = [
-            ['X' , 'O' , 'X' ],
-            [null, 'O' , null],
-            ['X' , null, null]
+            'X' , 'O' , 'X',
+            null, 'O' , null,
+            'X' , null, null
         ];
-        $game = new Game($grid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $game->computerPlays();
 
@@ -493,11 +493,11 @@ class GameTest extends \PHPUnit_Framework_TestCase
     {
         // Just for visualisation
         $grid = [
-            ['X' , 'O' , 'X' ],
-            [null, 'O' , null],
-            ['X' , null, null]
+            'X' , 'O' , 'X',
+            null, 'O' , null,
+            'X' , null, null
         ];
-        $game = new Game($grid);
+        $game = new Game([array_keys($grid, 'X'), array_keys($grid, 'O')]);
 
         $this->assertFalse($game->isOver());
     }
