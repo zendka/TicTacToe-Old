@@ -38,21 +38,23 @@ class GameTest extends \PHPUnit_Framework_TestCase
      */
     public function testComputerWinsRow()
     {
+        // Just for visualisation
         $winningGrid = [
             ['X' , null, 'X' ],
             ['O' , null, 'O' ],
             [null, 'X' , null]
         ];
-        $game = new Game($winningGrid);
+        $game = new Game([[0, 2, 7], [3, 5]]);
 
-        $game->computerMarks();
+        $game->computerPlays();
 
+        // Just for visualisation
         $expectedGrid = [
             ['X' , null, 'X' ],
             ['O' , 'O' , 'O' ],
             [null, 'X' , null]
         ];
-        $this->assertEquals($expectedGrid, $game->getGrid());
+        $this->assertEquals([[0, 2, 7], [3, 5, 4]], $game->getPlayersPositions());
     }
 
     /**

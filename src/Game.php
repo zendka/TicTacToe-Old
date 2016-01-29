@@ -38,9 +38,9 @@ class Game
     private $gameType = self::HUMAN_VS_COMPUTER;
 
     /**
-     * @var bool $computerWon True if the computer won, false otherwise
+     * @var bool $winner The winning player
      */
-    private $computerWon = false;
+    private $winner = null;
 
     /**
      * Constructor
@@ -97,6 +97,22 @@ class Game
     }
 
     /**
+     * Checks if player is valid
+     *
+     * @param int $player Player
+     *
+     * @return bool
+     */
+    private static function validPlayer($player)
+    {
+        if (in_array($player, [0, 1])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Returns players positions
      *
      * @return array Players' positions. E.g. [[1, 3, 4], [2, 6, 7]]
@@ -107,21 +123,33 @@ class Game
     }
 
     /**
-     * Checks if the computer won
+     * Returns the winner
      *
-     * @return array
+     * @return int Returns 0 if the first player won and 1 if the second player won
      */
-    public function computerWon()
+    public function getWinner()
     {
-        return $this->computerWon;
+        return $this->winner;
     }
 
     /**
-     * Calculates computer's best position and marks it
+     * Returns the winner
+     *
+     * @return int Returns 0 if it's the first player's turn and 1 if it's the second player's turn
      */
-    public function computerMarks()
+    private function getPlayerForThisTurn()
     {
-        if ($this->win()) {
+        return count($this->playersPositions[0]) > count($this->playersPositions[1]) ? 1 : 0;
+    }
+
+    /**
+     * Computer playes its turn
+     */
+    public function computerPlays()
+    {
+        $player = $this->getPlayerForThisTurn();
+
+        if ($this->win($player)) {
             return;
         } elseif ($this->blockWin()) {
             return;
@@ -162,15 +190,17 @@ class Game
     }
 
     /**
-     * Checks if there's a winning position and marks it
+     * Checks if there's a winning position and plays it
      *
-     * @return bool Returns true if a position was found and marked
+     * @param int $player Which player to play as: 0 or 1
+     *
+     * @return bool Returns true if successful, false otherwise
      */
-    private function win()
+    private function win($player)
     {
-        if ($computerWinningPositions = $this->getWinningPositions('O')) {
-            $this->grid[$computerWinningPositions[0]['row']][$computerWinningPositions[0]['col']] = 'O';
-            $this->computerWon = true;
+        if ($winningPositions = $this->getWinningPositions($player)) {
+            $this->playersPositions[$player][] = $winningPositions[array_rand($winningPositions)];
+            $this->winner = $player;
             return true;
         }
 
@@ -326,29 +356,46 @@ class Game
      *
      * A winning position is an empty space on a line with two of the player's marks
      *
-     * @param  str   $player Which player to check: 'X' or 'O'
-     * @return array         Array with the winning positions.
-     *                       E.g. [['row' => 0, 'col' => 2], ['row' => 1, 'col' => 1]]
+     * @param int $player Which player to play as: 0 or 1
+     *
+     * @return [int]
      */
-    private function getWinningPositions($player = 'O')
+    private function getWinningPositions($player)
     {
         $winningPositions = [];
 
-        for ($i=0; $i<3; $i++) {
-            for ($j=0; $j<3; $j++) {
-                if (empty($this->grid[$i][$j])) {
-                    $winningRow    = $this->grid[$i][($j+1)%3] == $player && $this->grid[$i][($j+2)%3] == $player;
-                    $winningColumn = $this->grid[($i+1)%3][$j] == $player && $this->grid[($i+2)%3][$j] == $player;
-                    $winningFirstDiagonal  = $i == $j   && $this->grid[($i+1)%3][($j+1)%3]   == $player && $this->grid[($i+2)%3][($j+2)%3]   == $player;
-                    $winningSecondDiagonal = $i == 2-$j && $this->grid[($i+1)%3][2-($i+1)%3] == $player && $this->grid[($i+2)%3][2-($i+2)%3] == $player;
-                    if ($winningRow || $winningColumn || $winningFirstDiagonal || $winningSecondDiagonal) {
-                        $winningPositions[] = array('row' => $i, 'col' => $j);
-                    }
-                }
+        $availablePositions = $this->availablePositions();
+        foreach ($availablePositions as $position) {
+            if (count(array_intersect($this->playersPositions[$player], $this->positionsOnSameRow($position))) == 2) {
+                $winningPositions[] = $position;
             }
         }
 
         return $winningPositions;
+    }
+
+    /**
+     * Returns the available positions
+     *
+     * @return [int]
+     */
+    private function availablePositions()
+    {
+        return array_diff(self::GRID, array_merge($this->playersPositions[0], $this->playersPositions[1]));
+    }
+
+    /**
+     * Returns the positions on the same row as the give position
+     *
+     * @param int $position A position
+     *
+     * @return [int]
+     */
+    private function positionsOnSameRow($position)
+    {
+        $firstPositionInRow = $position - ($position%3);
+
+        return [$firstPositionInRow, $firstPositionInRow+1, $firstPositionInRow+2];
     }
 
     /**
