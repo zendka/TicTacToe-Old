@@ -461,6 +461,7 @@ class Game
             // Check if there are winning position and if they are outside the excluded positions
             if ($winningPositions = $this->getWinningPositions($player)) {
                 if (!array_intersect($winningPositions, $excludedPositions)) {
+                    sort($this->playersPositions[$player]);
                     return;
                 }
             }
