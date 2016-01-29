@@ -7,6 +7,9 @@
  * using X (for player 1) and O (for player 2)
  * The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins the game.
  *
+ * In order to play perfectly the Game::computerPlays method implements Newell and Simon's algorithm
+ * as described at https://en.wikipedia.org/wiki/Tic-tac-toe
+ *
  * Convention: the grid's positions are identified by numbers from 0 to 8. See self::GRID
  *
  * @package TicTacToe

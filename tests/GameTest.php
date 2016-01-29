@@ -4,10 +4,10 @@
  * Tests the Tic-tac-toe game rules:
  *
  * Tic-tac-toe is played by two players who take turns marking the spaces in a 3×3 grid
- * using X (for the 1st player) and O (for the 2nd)
+ * using X (for player 1) and O (for player 2)
  * The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins the game.
  *
- * Assumption: the 1st player (using X) is always the human
+ * Convention: the grid's positions are identified by numbers from 0 to 8.
  */
 class GameTest extends \PHPUnit_Framework_TestCase
 {
