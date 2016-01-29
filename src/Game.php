@@ -117,30 +117,6 @@ class Game
     }
 
     /**
-     * Registers the player's mark in the grid
-     *
-     * @param  int  $row The row of the marked space
-     * @param  int  $col The column of the market space
-     * @return bool      True if the mark is valid, false otherwise
-     */
-    public function playerMarks($row, $col)
-    {
-        // Check if the mark is inside the grid
-        if (!($row >= 0 && $row < 3 && $col >=0 && $row <3)) {
-            return false;
-        }
-
-        // Check if the mark is in an empty space
-        if (!empty($this->grid[$row][$col])) {
-            return false;
-        }
-
-        $this->grid[$row][$col] = 'X';
-
-        return true;
-    }
-
-    /**
      * Calculates computer's best position and marks it
      */
     public function computerMarks()
