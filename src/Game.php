@@ -22,16 +22,41 @@ class Game
         3, 4, 5,
         6, 7, 8
     ];
+
     /** The grid's corner positions */
     const CORNERS   = [0, 2, 6, 8];
     /** The grid's side positions */
     const SIDES     = [1, 3, 5, 7];
-    /** The grid's first diagonal positions */
-    const DIAGONAL1 = [0, 4, 8];
-    /** The grid's second diagonal positions */
-    const DIAGONAL2 = [2, 4, 6];
     /** The grid's central position */
     const CENTER    = 4;
+
+    /** The grid's first diagonal */
+    const DIAGONAL1   = [0, 4, 8];
+    /** The grid's second diagonal */
+    const DIAGONAL2   = [2, 4, 6];
+    /** The grid's rows */
+    const ROWS    = [
+                        [0, 1, 2],
+                        [3, 4, 5],
+                        [5, 7, 8]
+                    ];
+    /** The grid's columns */
+    const COLUMNS = [
+                        [0, 3, 6],
+                        [1, 4, 7],
+                        [2, 5, 8]
+                    ];
+    /** The grid's lines: diagonals, rows and columns */
+    const LINES   = [
+                        self::DIAGONAL1,
+                        self::DIAGONAL2,
+                        [0, 1, 2],
+                        [3, 4, 5],
+                        [5, 7, 8],
+                        [0, 3, 6],
+                        [1, 4, 7],
+                        [2, 5, 8]
+                    ];
 
     /** @var array Players' positions. E.g. [[1, 3, 4], [2, 6, 7]] */
     private $playersPositions = [[], []];
@@ -41,9 +66,6 @@ class Game
 
     /** @var int The player's opponent for this turn: 0 or 1 */
     private $opponent = null;
-
-    /** @var bool $winner The winning player */
-    private $winner = null;
 
     /**
      * Constructor
@@ -100,16 +122,6 @@ class Game
     }
 
     /**
-     * Gets the winner
-     *
-     * @return int Returns 0 if the first player won and 1 if the second player won
-     */
-    public function getWinner()
-    {
-        return $this->winner;
-    }
-
-    /**
      * Computer plays
      */
     public function computerPlays()
@@ -132,29 +144,6 @@ class Game
     }
 
     /**
-     * Checks if the game is over
-     *
-     * @return bool
-     */
-    public function isOver()
-    {
-        if ($this->computerWon) {
-            return true;
-        }
-
-        // Check if there's any empty space left to play
-        for ($i=0; $i<3; $i++) {
-            for ($j=0; $j<3; $j++) {
-                if (empty($this->grid[$i][$j])) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Checks if there's a winning position and plays it
      *
      * @return bool Returns true if successful, false otherwise
@@ -163,7 +152,6 @@ class Game
     {
         if ($winningPositions = $this->getWinningPositions($this->player)) {
             array_push($this->playersPositions[$this->player], $winningPositions[array_rand($winningPositions)]);
-            $this->winner = $this->player;
             return true;
         } else {
             return false;
@@ -437,6 +425,40 @@ class Game
 
         if ($forcedPositions) {
             array_push($this->playersPositions[$this->player], $forcedPositions[array_rand($forcedPositions)]);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if there's a winner
+     *
+     * @return mixt Returns 0 if the first player won, 1 if the second player won and false if nobody won
+     */
+    public function winner()
+    {
+        foreach (self::LINES as $line) {
+            if (count(array_intersect($this->playersPositions[0], $line)) == 3) {
+                return 0;
+            } elseif (count(array_intersect($this->playersPositions[1], $line)) == 3) {
+                return 1;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if the game is over
+     *
+     * @return bool
+     */
+    public function isOver()
+    {
+        if ($this->winner() !== false) {
+            return true;
+        } elseif (!$this->availablePositions()) {
             return true;
         } else {
             return false;
