@@ -36,37 +36,35 @@ class Game
     /** @var array Players' positions. E.g. [[1, 3, 4], [2, 6, 7]] */
     private $playersPositions = [[], []];
 
-    const HUMAN_VS_COMPUTER    = 0;
-    const HUMAN_VS_HUMAN       = 1;
-    const COMPUTER_VS_COMPUTER = 2;
-    /** @var int Game type: 0 for human vs computer, 1 for human vs human and 2 for computer vs computer */
-    private $gameType = self::HUMAN_VS_COMPUTER;
+    /** @var int The player for this turn: 0 or 1 */
+    private $player = null;
 
-    /**
-     * @var bool $winner The winning player
-     */
+    /** @var int The player's opponent for this turn: 0 or 1 */
+    private $opponent = null;
+
+    /** @var bool $winner The winning player */
     private $winner = null;
 
     /**
      * Constructor
      *
      * @param array $playersPositions Players' positions. E.g. [[1, 3, 4], [2, 6, 7]]
-     * @param int   $gameType         Game type: 0 for human vs computer, 1 for human vs human and 2 for computer vs computer
      */
-    public function __construct($playersPositions = [[], []], $gameType = self::HUMAN_VS_COMPUTER)
+    public function __construct($playersPositions = [[], []])
     {
-        if (!self::validGameType($gameType) || !self::validPlayersPositions($playersPositions)) {
+        if (!self::validPlayersPositions($playersPositions)) {
             throw new \InvalidArgumentException('Game::__construct was called with invalid arguments.');
         }
 
-        $this->gameType = $gameType;
         $this->playersPositions = $playersPositions;
+        $this->player           = count($this->playersPositions[0]) > count($this->playersPositions[1]) ? 1 : 0;
+        $this->opponent         = 1 - $this->player;
     }
 
     /**
-     * Checks if the given parameter represents valid players positions
+     * Checks if the given players' positions are valid
      *
-     * @param array $playersPositions Players positions
+     * @param array $playersPositions Players' positions. E.g. [[1, 3, 4], [2, 6, 7]]
      *
      * @return bool
      */
@@ -75,10 +73,16 @@ class Game
         if (!isset($playersPositions[0]) || !isset($playersPositions[1])) {
             return false;
         } elseif (array_intersect($playersPositions[0], $playersPositions[1])) {
-            // Players positions overlap
+            // Players' positions overlap
             return false;
-        } elseif (array_diff($playersPositions[0] + $playersPositions[1], self::GRID)) {
-            // Players positions are outside the grid
+        } elseif (array_diff(array_merge($playersPositions[0], $playersPositions[1]), self::GRID)) {
+            // Players' positions are outside the grid
+            return false;
+        } elseif (count($playersPositions[0]) < count($playersPositions[1])) {
+            // First player has fewer positions than the second player. Not possible as it went first
+            return false;
+        } elseif (count($playersPositions[0]) > count($playersPositions[1]) + 1) {
+            // First player has way to many positions
             return false;
         } else {
             return true;
@@ -86,39 +90,7 @@ class Game
     }
 
     /**
-     * Checks if game type is valid
-     *
-     * @param int $gameType The game type
-     *
-     * @return bool
-     */
-    private static function validGameType($gameType)
-    {
-        if (in_array($gameType, [self::HUMAN_VS_COMPUTER, self::HUMAN_VS_HUMAN, self::COMPUTER_VS_COMPUTER])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Checks if player is valid
-     *
-     * @param int $player Player
-     *
-     * @return bool
-     */
-    private static function validPlayer($player)
-    {
-        if (in_array($player, [0, 1])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Returns players positions
+     * Gets players' positions
      *
      * @return array Players' positions. E.g. [[1, 3, 4], [2, 6, 7]]
      */
@@ -128,7 +100,7 @@ class Game
     }
 
     /**
-     * Returns the winner
+     * Gets the winner
      *
      * @return int Returns 0 if the first player won and 1 if the second player won
      */
@@ -138,35 +110,23 @@ class Game
     }
 
     /**
-     * Returns the winner
-     *
-     * @return int Returns 0 if it's the first player's turn and 1 if it's the second player's turn
-     */
-    private function getPlayerForThisTurn()
-    {
-        return count($this->playersPositions[0]) > count($this->playersPositions[1]) ? 1 : 0;
-    }
-
-    /**
-     * Computer playes its turn
+     * Computer plays
      */
     public function computerPlays()
     {
-        $player = $this->getPlayerForThisTurn();
-
-        if ($this->win($player)) {
+        if ($this->win()) {
             return;
-        } elseif ($this->blockWin($player)) {
+        } elseif ($this->blockWin()) {
             return;
-        } elseif ($this->fork($player)) {
+        } elseif ($this->fork()) {
             return;
-        } elseif ($this->blockFork($player)) {
+        } elseif ($this->blockFork()) {
             return;
-        } elseif ($this->center($player)) {
+        } elseif ($this->center()) {
             return;
-        } elseif ($this->corner($player)) {
+        } elseif ($this->corner()) {
             return;
-        } elseif ($this->side($player)) {
+        } elseif ($this->side()) {
             return;
         }
     }
@@ -197,101 +157,65 @@ class Game
     /**
      * Checks if there's a winning position and plays it
      *
-     * @param int $player Which player to play as: 0 or 1
-     *
      * @return bool Returns true if successful, false otherwise
      */
-    private function win($player)
+    private function win()
     {
-        if ($winningPositions = $this->getWinningPositions($player)) {
-            $this->playersPositions[$player][] = $winningPositions[array_rand($winningPositions)];
-            sort($this->playersPositions[$player]);
-            $this->winner = $player;
+        if ($winningPositions = $this->getWinningPositions($this->player)) {
+            array_push($this->playersPositions[$this->player], $winningPositions[array_rand($winningPositions)]);
+            $this->winner = $this->player;
             return true;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     /**
      * Checks if there's a winning position for the opponent and blocks it
      *
-     * @param int $player Which player to play as: 0 or 1
-     *
      * @return bool Returns true if successful, false otherwise
      */
-    private function blockWin($player)
+    private function blockWin()
     {
-        $opponent = self::opponent($player);
-        if ($opponentsWinningPositions = $this->getWinningPositions($opponent)) {
-            $this->playersPositions[$player][] = $opponentsWinningPositions[array_rand($opponentsWinningPositions)];
-            sort($this->playersPositions[$player]);
+        if ($opponentsWinningPositions = $this->getWinningPositions($this->opponent)) {
+            array_push($this->playersPositions[$this->player], $opponentsWinningPositions[array_rand($opponentsWinningPositions)]);
             return true;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     /**
-     * Checks if there's a fork opportunity and marks it
+     * Checks if there's a fork opportunity and plays it
      *
-     * @param int $player Which player to play as: 0 or 1
-     *
-     * @return bool Returns true if a position was found and marked
+     * @return bool Returns true if successful, false otherwise
      */
-    private function fork($player)
+    private function fork()
     {
-        $availablePositions = $this->availablePositions();
-        foreach ($availablePositions as $position) {
-            // Simulate a mark at this position
-            array_push($this->playersPositions[$player], $position);
-
-            if (sizeof($this->getWinningPositions($player)) > 1) {
-                // Leave the mark in place
-                return true;
-            } else {
-                // Remove the mark
-                array_pop($this->playersPositions[$player]);
-            }
+        if ($forkPositions = $this->forkPositions($this->player)) {
+            array_push($this->playersPositions[$this->player], $forkPositions[array_rand($forkPositions)]);
+            return true;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
     /**
      * Checks if there's a fork opportunity for the opponent and avoids it
      *
-     * @param int $player Which player to play as: 0 or 1
-     *
-     * @return bool Returns true if a position was found and blocked
+     * @return bool Returns true if successful, false otherwise
      */
-    private function blockFork($player)
+    private function blockFork()
     {
-        $forkPositions = [];
-
-        $opponent = self::opponent($player);
-
-        $availablePositions = $this->availablePositions();
-        foreach ($availablePositions as $position) {
-            // Simulate a mark at this position
-            array_push($this->playersPositions[$opponent], $position);
-
-            if (sizeof($this->getWinningPositions($opponent)) > 1) {
-                $forkPositions[] = $position;
+        if ($forkPositions = $this->forkPositions($this->opponent)) {
+            if (sizeof($forkPositions) == 1) {
+                // Block fork
+                array_push($this->playersPositions[$this->player], $forkPositions[0]);
+                return true;
+            } elseif (sizeof($forkPositions) > 1) {
+                return $this->forceOpponent($forkPositions);
             }
-            // Remove the mark
-            array_pop($this->playersPositions[$opponent]);
-        }
-
-        if (sizeof($forkPositions) == 1) {
-            // Block fork
-            array_push($this->playersPositions[$player], $position);
-            return true;
-        } elseif (sizeof($forkPositions) > 1) {
-            $this->forceOpponent($player, $forkPositions);
-            return true;
         } else {
-            // No forks
             return false;
         }
     }
@@ -299,14 +223,12 @@ class Game
     /**
      * Marks the center if available
      *
-     * @param int $player Which player to play as: 0 or 1
-     *
-     * @return bool Returns true if the center has been marked, false otherwise
+     * @return bool Returns true if successful, false otherwise
      */
-    private function center($player)
+    private function center()
     {
         if (in_array(self::CENTER, $this->availablePositions())) {
-            array_push($this->playersPositions[$player], self::CENTER);
+            array_push($this->playersPositions[$this->player], self::CENTER);
             return true;
         } else {
             return false;
@@ -316,15 +238,12 @@ class Game
     /**
      * Marks a corner if available
      *
-     * @param int $player Which player to play as: 0 or 1
-     *
-     * @return bool Returns true if a corner has been marked, false otherwise
+     * @return bool Returns true if successful, false otherwise
      */
-    private function corner($player)
+    private function corner()
     {
         if ($availableCorners = array_intersect(self::CORNERS, $this->availablePositions())) {
-            array_push($this->playersPositions[$player], $availableCorners[array_rand($availableCorners)]);
-            sort($this->playersPositions[$player]);
+            array_push($this->playersPositions[$this->player], $availableCorners[array_rand($availableCorners)]);
             return true;
         } else {
             return false;
@@ -334,15 +253,12 @@ class Game
     /**
      * Marks a side if available
      *
-     * @param int $player Which player to play as: 0 or 1
-     *
-     * @return bool Returns true if a side has been marked, false otherwise
+     * @return bool Returns true if successful, false otherwise
      */
-    private function side($player)
+    private function side()
     {
         if ($availableSides = array_intersect(self::SIDES, $this->availablePositions())) {
-            array_push($this->playersPositions[$player], $availableSides[array_rand($availableSides)]);
-            sort($this->playersPositions[$player]);
+            array_push($this->playersPositions[$this->player], $availableSides[array_rand($availableSides)]);
             return true;
         } else {
             return false;
@@ -352,9 +268,9 @@ class Game
     /**
      * Returns the winning positions for a given player
      *
-     * A winning position is an empty space on a line with two of the player's marks
+     * A winning position is an available position which is in line with two of the player's positions
      *
-     * @param int $player Which player to play as: 0 or 1
+     * @param int $player The player
      *
      * @return [int]
      */
@@ -364,25 +280,67 @@ class Game
 
         $availablePositions = $this->availablePositions();
         foreach ($availablePositions as $position) {
-            if (count(array_intersect($this->playersPositions[$player], $this->positionsOnSameRow($position))) == 2) {
+            if ($this->isInWinningRow($position, $player) ||
+                $this->isInWinningColumn($position, $player) ||
+                $this->isInWinningFirstDiagonal($position, $player) ||
+                $this->isInWinningSecondDiagonal($position, $player)) {
+
                 $winningPositions[] = $position;
-                continue;
-            }
-            if (count(array_intersect($this->playersPositions[$player], $this->positionsOnSameColumn($position))) == 2) {
-                $winningPositions[] = $position;
-                continue;
-            }
-            if (in_array($position, self::DIAGONAL1) && count(array_intersect($this->playersPositions[$player], self::DIAGONAL1)) == 2) {
-                $winningPositions[] = $position;
-                continue;
-            }
-            if (in_array($position, self::DIAGONAL2) && count(array_intersect($this->playersPositions[$player], self::DIAGONAL2)) == 2) {
-                $winningPositions[] = $position;
-                continue;
             }
         }
-
         return $winningPositions;
+    }
+
+    /**
+     * Checks if the available position is on the same row with two of the players positions
+     *
+     * @param  int  $position The available position
+     * @param  int  $player   The player
+     *
+     * @return boolean
+     */
+    private function isInWinningRow($position, $player)
+    {
+        return count(array_intersect($this->playersPositions[$player], $this->positionsOnSameRow($position))) == 2;
+    }
+
+    /**
+     * Checks if the available position is on the same column with two of the players positions
+     *
+     * @param  int  $position The available position
+     * @param  int  $player   The player
+     *
+     * @return boolean
+     */
+    private function isInWinningColumn($position, $player)
+    {
+        return count(array_intersect($this->playersPositions[$player], $this->positionsOnSameColumn($position))) == 2;
+    }
+
+    /**
+     * Checks if the available position is on the first diagonal together with two of the players positions
+     *
+     * @param  int  $position The available position
+     * @param  int  $player   The player
+     *
+     * @return boolean
+     */
+    private function isInWinningFirstDiagonal($position, $player)
+    {
+        return in_array($position, self::DIAGONAL1) && count(array_intersect($this->playersPositions[$player], self::DIAGONAL1)) == 2;
+    }
+
+    /**
+     * Checks if the available position is on the second diagonal together with two of the players positions
+     *
+     * @param  int  $position The available position
+     * @param  int  $player   The player
+     *
+     * @return boolean
+     */
+    private function isInWinningSecondDiagonal($position, $player)
+    {
+        return in_array($position, self::DIAGONAL2) && count(array_intersect($this->playersPositions[$player], self::DIAGONAL2)) == 2;
     }
 
     /**
@@ -396,70 +354,92 @@ class Game
     }
 
     /**
-     * Returns the positions on the same row as the give position
+     * Returns the positions on the same row as the given position
      *
-     * @param int $position A position
+     * @param int $position Position
      *
      * @return [int]
      */
     private function positionsOnSameRow($position)
     {
-        $firstPositionInRow = $position - ($position%3);
+        $firstPositionInRow = $position - ($position % 3);
 
-        return [$firstPositionInRow, $firstPositionInRow+1, $firstPositionInRow+2];
+        return [$firstPositionInRow, $firstPositionInRow + 1, $firstPositionInRow + 2];
     }
 
     /**
-     * Returns the positions on the same column as the give position
+     * Returns the positions on the same column as the given position
      *
-     * @param int $position A position
+     * @param int $position Position
      *
      * @return [int]
      */
     private function positionsOnSameColumn($position)
     {
-        return [$position, ($position+3) % 9, ($position+6) % 9];
+        return [$position, ($position + 3) % 9, ($position + 6) % 9];
     }
 
     /**
-     * Returns the player's opponent
+     * Returns the fork positions for a given player
      *
      * @param int $player The player
      *
-     * @return [int] The opponent
+     * @return [int]
      */
-    private function opponent($player)
+    private function forkPositions($player)
     {
-        return 1 - $player;
-    }
-
-    /**
-     * Force opponent to mark outside specific positions
-     *
-     * Do this by creating two in a row - a future winning position that the opponent has to counter
-     *
-     * @param int   $player Which player to play as: 0 or 1
-     * @param [int] $excludedPositions The excluded positions
-     */
-    private function forceOpponent($player, $excludedPositions)
-    {
-        $opponent = self::opponent($player);
+        $forkPositions = [];
 
         $availablePositions = $this->availablePositions();
         foreach ($availablePositions as $position) {
             // Simulate a mark at this position
             array_push($this->playersPositions[$player], $position);
 
+            if (sizeof($this->getWinningPositions($player)) > 1) {
+                $forkPositions[] = $position;
+            }
+            // Remove the mark
+            array_pop($this->playersPositions[$player]);
+        }
+
+        return $forkPositions;
+    }
+
+    /**
+     * Force opponent to play outside specific excluded positions
+     *
+     * Here's how: Create a winning position outside the excluded positions.
+     * The opponent will have to play into this position in order not to lose.
+     *
+     * @param [int] $excludedPositions The excluded positions
+     *
+     * @return bool Returns true if successful, false otherwise
+     */
+    private function forceOpponent($excludedPositions)
+    {
+        $forcedPositions = [];
+
+        $availablePositions = $this->availablePositions();
+        foreach ($availablePositions as $position) {
+            // Simulate a mark at this position
+            array_push($this->playersPositions[$this->player], $position);
+
             // Check if there are winning position and if they are outside the excluded positions
-            if ($winningPositions = $this->getWinningPositions($player)) {
+            if ($winningPositions = $this->getWinningPositions($this->player)) {
                 if (!array_intersect($winningPositions, $excludedPositions)) {
-                    sort($this->playersPositions[$player]);
-                    return;
+                    $forcedPositions[] = $position;
                 }
             }
 
             // Remove mark
-            array_pop($this->playersPositions[$player]);
+            array_pop($this->playersPositions[$this->player]);
+        }
+
+        if ($forcedPositions) {
+            array_push($this->playersPositions[$this->player], $forcedPositions[array_rand($forcedPositions)]);
+            return true;
+        } else {
+            return false;
         }
     }
 }
