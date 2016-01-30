@@ -409,53 +409,85 @@ class GameTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerPlays
-     * @covers \Florin\TicTacToe\Game::computerWon
+     * @covers \Florin\TicTacToe\Game::winner
      */
-    public function testComputerWins()
+    public function testNobodyWon()
     {
         $grid = [
             'X' , 'O' , 'X',
-            null, 'O' , null,
-            'X' , null, null
-        ];
-
-        $this->assertTrue($game->computerWon());
-    }
-
-    /**
-     * @covers \Florin\TicTacToe\Game::computerPlays
-     * @covers \Florin\TicTacToe\Game::computerWon
-     */
-    public function testComputerHasntWon()
-    {
-        $grid = [
-            'X' , 'O' , 'X',
-            null, 'O' , null,
-            'X' , null, null
+            null, 'O' , 'X',
+            'O' , null, null
         ];
         $game = new Game(self::getPlayersPositions($grid));
 
-        $this->assertFalse($game->computerWon());
+        $this->assertFalse($game->winner());
     }
 
     /**
-     * @covers \Florin\TicTacToe\Game::computerPlays
-     * @covers \Florin\TicTacToe\Game::isOver
+     * @covers \Florin\TicTacToe\Game::winner
      */
-    public function testGameIsOver()
+    public function testPlayer0Won()
+    {
+        $grid = [
+            'X' , 'X' , 'X',
+            null, 'O' , null,
+            'O' , null, null
+        ];
+        $game = new Game(self::getPlayersPositions($grid));
+
+        $this->assertEquals(0, $game->winner());
+    }
+
+    /**
+     * @covers \Florin\TicTacToe\Game::winner
+     */
+    public function testPlayer1Won()
+    {
+        $grid = [
+            'X' , 'X' , 'O',
+            'X' , 'O' , null,
+            'O' , null, null
+        ];
+        $game = new Game(self::getPlayersPositions($grid));
+
+        $this->assertEquals(1, $game->winner());
+    }
+
+    /**
+     * @covers \Florin\TicTacToe\Game::isOver
+     * @covers \Florin\TicTacToe\Game::winner
+     */
+    public function testGameIsOverBecauseNoMoreAvailableSpace()
     {
         $grid = [
             'X' , 'O' , 'X',
-            null, 'O' , null,
-            'X' , null, null
+            'O' , 'O' , 'X',
+            'X' , 'X' , 'O'
         ];
+        $game = new Game(self::getPlayersPositions($grid));
 
         $this->assertTrue($game->isOver());
     }
 
     /**
      * @covers \Florin\TicTacToe\Game::isOver
+     * @covers \Florin\TicTacToe\Game::winner
+     */
+    public function testGameIsOverBecauseWon()
+    {
+        $grid = [
+            'X' , 'O' , 'X',
+            null, 'O' , null,
+            'X' , 'O' , null
+        ];
+        $game = new Game(self::getPlayersPositions($grid));
+
+        $this->assertTrue($game->isOver());
+    }
+
+    /**
+     * @covers \Florin\TicTacToe\Game::isOver
+     * @covers \Florin\TicTacToe\Game::winner
      */
     public function testGameIsNotOver()
     {
