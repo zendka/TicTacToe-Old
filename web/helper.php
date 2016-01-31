@@ -83,10 +83,10 @@ function getTemplateData($input, $game)
 {
     if ($game->isOver()) {
         if ($game->winner() === false) {
-            $message = "Game over. It's a draw.";
+            $message = "It's a draw";
         } else {
             $winner = $game->winner() == 0 ? 'X' : 'O';
-            $message = "Game over. The winner is " . $winner;
+            $message = "$winner won";
         }
     } else {
         $message = '';
