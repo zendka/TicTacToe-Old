@@ -10,26 +10,41 @@
 
     <script type="text/javascript">
         var currentPlayer = '<?php print $currentPlayer; ?>';
+        var gameOver = <?php print $gameOver ? 'true' : 'false'; ?>;
+        var gameType = <?php print $gameType; ?>;
+        var COMPUTER_VS_COMPUTER = <?php print COMPUTER_VS_COMPUTER; ?>;
     </script>
 
     <script type="text/javascript">
-        window.onload = function() {
-            // When user clicks inside an input set value and autosubmit the form
-            inputs = document.getElementsByTagName('input');
+        function autosubmitIfComputersPlay() {
+            if (gameType == COMPUTER_VS_COMPUTER && !gameOver) {
+                var forms = document.getElementsByTagName('form');
+                var form = forms[0];
+                setTimeout(function() {
+                    form.submit();
+                }, 1000);
+            }
+        }
+
+        function submitOnUserClick() {
+            var inputs = document.getElementsByTagName('input');
             for (var i=inputs.length; i--;) {
-                if (inputs[i].getAttribute('type') == 'text') {
+                if (inputs[i].getAttribute('type') == 'text' && !inputs[i].readOnly) {
                     inputs[i].onfocus = function() {
-                        if (!this.readOnly) {
-                            this.readOnly = true;
-                            this.value = currentPlayer;
-                            var form = this.parentElement;
-                            setTimeout(function() {
-                                form.submit();
-                            }, 500);
-                        }
+                        this.readOnly = true;
+                        this.value = currentPlayer;
+                        var form = this.parentElement;
+                        setTimeout(function() {
+                            form.submit();
+                        }, 500);
                     }
                 }
             }
+        }
+
+        window.onload = function() {
+            autosubmitIfComputersPlay();
+            submitOnUserClick()
         };
     </script>
 
@@ -37,10 +52,14 @@
         body {
             background-color: #E6E1DC;
             text-align: center;
-            font-size: 25px;
+            font-size: 20px;
         }
         h1 {
             font-size: 40px;
+        }
+        .message {
+            background-color: red;
+            line-height: 3rem;
         }
         form {
             margin: 2rem;
@@ -67,22 +86,25 @@
 <body>
     <h1>Tic-tac-toe</h1>
 
+    <p class="message"><?php if(isset($message)) {print $message;} ?></p>
+
     <form>
         <?php
         for ($i=0; $i<9; $i++) {
-            $readonly = (!empty($grid[$i]) || $gameOver) ? 'readonly' : '';
+            $readonly = (!empty($grid[$i]) || $gameOver || $gameType == 3) ? 'readonly' : '';
             print "<input type='text' size='1' name='grid[$i]' value='{$grid[$i]}' $readonly>";
             if ($i%3 == 2) {
                 print '<br>';
             }
         }
         ?>
+        <input type="hidden" name="gameType" value="<?php print $gameType; ?>">
         <input type="Submit" value="Submit">
     </form>
 
-    <p><a href=".?firstPlayer=human">Play again - human first</a></p>
-    <p><a href=".?firstPlayer=computer">Play again - computer first</a></p>
-
-    <p class="message"><?php if(isset($message)) {print $message;} ?></p>
+    <p><a href=".?humanStarts=1">Play against computer - you first</a></p>
+    <p><a href=".?humanStarts=0">Play against computer - computer first</a></p>
+    <p><a href=".?gameType=<?php print HUMAN_VS_HUMAN;?>">Play against human</a></p>
+    <p><a href=".?gameType=<?php print COMPUTER_VS_COMPUTER;?>">Let computers play</a></p>
 </body>
 </html>
