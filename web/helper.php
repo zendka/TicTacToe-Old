@@ -1,50 +1,86 @@
 <?php
-/*
- * This file handles the HTTP requests:
- * - processes input
- * - plays the game round
- * - initialises the variables to be used in the template file
- */
 
 require_once dirname(__DIR__) . '/src/autoload.php';
 
 use Florin\TicTacToe\Game as Game;
 
 /**
- * Cleans up input grid
+ * Processes user input
  *
- * @param  array $inputGrid The input grid
- * @return array $grid      The cleaned grid
+ * @return array Array with two keys: firstPlayer - and integer representing the first player
+ *               and playersPositions - an array representing the players positions
  */
-function getGridFromInput($inputGrid)
+function processInput()
 {
-    for ($i=0; $i<3; $i++) {
-        for ($j=0; $j<3; $j++) {
-            if (isset($inputGrid[$i][$j]) && in_array($inputGrid[$i][$j], array('X', 'O'))) {
-                $grid[$i][$j] = $inputGrid[$i][$j];
-            } else {
-                $grid[$i][$j] = null;
-            }
-        }
+    $firstPlayer = isset($_GET['firstPlayer']) && in_array($_GET['firstPlayer'], ['human', 'computer']) ? $_GET['firstPlayer'] : null;
+    $playersPositions = isset($_GET['grid']) && is_array($_GET['grid']) ?
+                        [array_keys($_GET['grid'], 'X'), array_keys($_GET['grid'], 'O')] :
+                        [[], []];
+    return [
+        'firstPlayer' => $firstPlayer,
+        'playersPositions' => $playersPositions
+    ];
+}
+
+/**
+ * Plays round based on a given configuration
+ *
+ * @param  int   $firstPlayer      Which player to go first if
+ * @param  array $playersPositions [description]
+ *
+ * @return Game The game after the round has been played
+ */
+function playRound($firstPlayer, $playersPositions)
+{
+    $game = new Game($playersPositions);
+
+    if (!($firstPlayer == 'human')) {
+        $game->computerPlays();
+    }
+
+    return $game;
+}
+
+function getGrid($playersPositions)
+{
+    $grid = [
+        null, null, null,
+        null, null, null,
+        null, null, null
+    ];
+
+    foreach ($playersPositions[0] as $position) {
+        $grid[$position] = 'X';
+    }
+    foreach ($playersPositions[1] as $position) {
+        $grid[$position] = 'O';
     }
 
     return $grid;
 }
 
-// Process input
-$firstPlayer = isset($_GET['first']) ? $_GET['first'] : null;
-$cleanedGrid = isset($_GET['grid']) ? getGridFromInput($_GET['grid']) : null;
+function getGameData($game)
+{
+    if ($game->isOver()) {
+        if ($game->winner() === false) {
+            $message = "Game over. It's a draw.";
+        } else {
+            $message = "Game over. The winner is " . $game->winner();
+        }
+    } else {
+        $message = '';
+    }
 
-// Play round
-$game = new Game($cleanedGrid);
-$newGame = is_null($cleanedGrid) ? true : false;
-if (!$newGame || ($newGame && $firstPlayer == 'computer')) {
-    $game->computerMarks();
+    $playersPositions = $game->getPlayersPositions();
+
+    return [
+        'gameOver' => $game->isOver(),
+        'message' => $message,
+        'grid' => getGrid($playersPositions),
+        'currentPlayer' => count($playersPositions[0]) > count($playersPositions[1]) ? 'O' : 'X'
+    ];
 }
 
-// Initialise variables to unse in template
-$grid = $game->getGrid();
-$gameOver = $game->isOver();
-if ($gameOver) {
-    $message = $game->computerWon() ? "Game over. Computer Won." : "Game over. It's a draw.";
-}
+$input = processInput();
+$game = playRound($input['firstPlayer'], $input['playersPositions']);
+$data = getGameData($game);

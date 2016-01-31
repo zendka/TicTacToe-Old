@@ -1,6 +1,7 @@
 <!doctype html>
 
 <?php include 'helper.php'; ?>
+<?php extract($data); ?>
 
 <html lang="en">
 <head>
@@ -8,15 +9,19 @@
     <title>Tic-tac-toe</title>
 
     <script type="text/javascript">
+        var currentPlayer = '<?php print $currentPlayer; ?>';
+    </script>
+
+    <script type="text/javascript">
         window.onload = function() {
-            // When user clicks inside an input set value to 'X' and autosubmit the form
-            var inputs = document.getElementsByTagName('input');
+            // When user clicks inside an input set value and autosubmit the form
+            inputs = document.getElementsByTagName('input');
             for (var i=inputs.length; i--;) {
                 if (inputs[i].getAttribute('type') == 'text') {
                     inputs[i].onfocus = function() {
                         if (!this.readOnly) {
                             this.readOnly = true;
-                            this.value = 'X';
+                            this.value = currentPlayer;
                             var form = this.parentElement;
                             setTimeout(function() {
                                 form.submit();
@@ -64,19 +69,19 @@
 
     <form>
         <?php
-        for ($i=0; $i<3; $i++) {
-            for ($j=0; $j<3; $j++) {
-                $readonly = (!empty($grid[$i][$j]) || $gameOver) ? 'readonly' : '';
-                print "<input type='text' size='1' name='grid[$i][$j]' value='{$grid[$i][$j]}' $readonly>";
+        for ($i=0; $i<9; $i++) {
+            $readonly = (!empty($grid[$i]) || $gameOver) ? 'readonly' : '';
+            print "<input type='text' size='1' name='grid[$i]' value='{$grid[$i]}' $readonly>";
+            if ($i%3 == 2) {
+                print '<br>';
             }
-            print '<br>';
         }
         ?>
         <input type="Submit" value="Submit">
     </form>
 
-    <p><a href=".?first=human">Play again - human first</a></p>
-    <p><a href=".?first=computer">Play again - computer first</a></p>
+    <p><a href=".?firstPlayer=human">Play again - human first</a></p>
+    <p><a href=".?firstPlayer=computer">Play again - computer first</a></p>
 
     <p class="message"><?php if(isset($message)) {print $message;} ?></p>
 </body>
